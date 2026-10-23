@@ -57,6 +57,14 @@
     .big { font-size: 64px; }
     .error { color: var(--danger); font-size: 16px; margin-top: 8px; }
     audio { max-width: 100%; }
+    .progress { position: sticky; top: 0; z-index: 2; margin: 16px -16px 0; padding: 10px 16px; background: var(--bg); border-bottom: 2px solid var(--border); }
+    .bar { height: 12px; border-radius: 999px; background: var(--border); overflow: hidden; margin-top: 6px; }
+    .bar > div { height: 100%; background: var(--leaf); border-radius: 999px; transition: width .4s; }
+    .card.next { border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255,107,74,.18); }
+    .nextTag { display: inline-block; font-size: 14px; color: #fff; background: var(--coral); border-radius: 999px; padding: 2px 10px; margin-bottom: 6px; }
+    .thanks { background: var(--leaf-soft); border: 2px solid var(--leaf); border-radius: 20px; padding: 18px; margin-top: 16px; text-align: center; }
+    .thanks .big { font-size: 48px; }
+    .finish { margin-top: 24px; text-align: center; }
   </style>
 </head>
 <body>
@@ -129,12 +137,56 @@ function render() {
     <div class="tip">👉 La primera vez, el teléfono te pide permiso para usar el micrófono: toca <b>Permitir</b>. Después toca <b>Grabar</b>, di la frase con cariño, como se la dirías a ${kid}, y toca <b>Parar</b>. Puedes escucharla antes de guardarla.</div>
     ${data.replies.length ? `<h2>💌 Mensajes de ${kid}</h2>${data.replies.map(replyCard).join('')}` : ''}
     <h2>🎙️ Frases para grabar ${todo ? `<span class="soft">(${todo})</span>` : ''}</h2>
+    ${data.phrases.length ? '<div class="progress" id="progress"></div>' : ''}
     ${data.phrases.length ? data.phrases.map(phraseCard).join('') : `<p class="soft">Por ahora no hay frases. ¡Vuelve pronto!</p>`}
+    <div id="thanks"></div>
+    ${data.phrases.length ? '<div class="finish"><button class="plain" id="finish">👋 Terminé por hoy</button></div>' : ''}
     <p class="soft" style="font-size:14px;margin-top:32px">Solo la familia de ${kid} tiene este enlace. Las grabaciones son privadas.</p>`;
   data.phrases.forEach((p, i) => wirePhrase(p, i));
+  const finish = document.getElementById('finish');
+  if (finish) finish.addEventListener('click', () => showThanks(true));
+  updateProgress(false);
   app.querySelectorAll('audio[data-reply]').forEach((el) => {
     el.addEventListener('play', () => call({ action: 'heard', replyId: el.dataset.reply }).catch(() => {}), { once: true });
   });
+}
+
+// After each save: show progress, point to the next line, or say thank you
+function updateProgress(scroll) {
+  const box = document.getElementById('progress');
+  if (!box) return;
+  const total = data.phrases.length;
+  const done = data.phrases.filter((p) => p.recorded).length;
+  box.innerHTML = `<b>Grabaste ${done} de ${total}</b> ${done === total ? '🎉' : ''}<div class="bar"><div style="width:${Math.round((done / total) * 100)}%"></div></div>`;
+  document.querySelectorAll('.card.next').forEach((c) => {
+    c.classList.remove('next');
+    c.querySelector('.nextTag')?.remove();
+  });
+  const next = data.phrases.findIndex((p) => !p.recorded);
+  if (next === -1) {
+    showThanks(scroll);
+    return;
+  }
+  const card = document.getElementById('p' + next);
+  card.classList.add('next');
+  card.insertAdjacentHTML('afterbegin', '<div class="nextTag">👉 Sigue esta</div>');
+  if (scroll) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function showThanks(scroll) {
+  const kid = esc(data.kid.nickname);
+  const done = data.phrases.filter((p) => p.recorded).length;
+  const all = done === data.phrases.length;
+  const box = document.getElementById('thanks');
+  box.innerHTML = `<div class="thanks"><div class="big">${all ? '🎉💛' : '💛'}</div>
+    <h2 style="margin-top:4px">¡Gracias, ${esc(data.link.name)}!</h2>
+    <p>${done
+      ? `${kid} va a escuchar <b>tu voz</b> en ${done === 1 ? 'una frase' : done + ' frases'} de sus lecciones de español.`
+      : `Cuando grabes una frase, ${kid} va a escuchar tu voz en sus lecciones.`}</p>
+    <p>${all ? 'Ya grabaste todas las frases. ' : 'Puedes grabar las demás cuando quieras. '}Ya puedes cerrar esta página.</p>
+    <p class="soft">Guarda el mensaje con este enlace: cuando vuelvas habrá frases nuevas, y aquí vas a escuchar los mensajes de voz de ${kid}.</p>
+  </div>`;
+  if (scroll) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function replyCard(r) {
@@ -223,6 +275,9 @@ function wirePhrase(p, i) {
       card.classList.add('done');
       card.querySelector('.who').innerHTML = `${esc(speakerLabel(p.speaker))} · <b style="color:var(--leaf)">✅ ¡Guardada! Gracias</b>`;
       idle();
+      const more = data.phrases.some((x) => !x.recorded);
+      error.innerHTML = more ? '<span style="color:var(--leaf)">¡Muy bien! Sigue con la próxima frase 👇</span>' : '';
+      setTimeout(() => updateProgress(true), more ? 900 : 300);
     } catch {
       btn.disabled = false;
       btn.textContent = '✅ Guardar';
@@ -238,6 +293,8 @@ function wirePhrase(p, i) {
       card.classList.remove('done');
       card.querySelector('.who').textContent = speakerLabel(p.speaker);
       idle();
+      document.getElementById('thanks').innerHTML = '';
+      updateProgress(false);
     } catch {
       btn.disabled = false;
       error.textContent = 'No se pudo borrar. Inténtalo otra vez.';
