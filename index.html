@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
-  <title>Habla · Voces de la familia</title>
+  <title>FamilySpeak · Voces de la familia · Vwa fanmi an</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
@@ -69,18 +69,81 @@
 </head>
 <body>
 <main id="app">
-  <div class="center"><div class="big">🎙️</div><p class="soft">Cargando…</p></div>
+  <div class="center"><div class="big">🎙️</div><p class="soft">…</p></div>
 </main>
 
 <script>
-// Habla family voice page. Source: habla-app/web/familia/index.html
-// The secret part of the link (#t=…) never leaves this page except to the Habla server.
+// FamilySpeak family voice page. Source: habla-app/web/familia/index.html
+// The secret part of the link (#t=…) never leaves this page except to the FamilySpeak server.
+// Words: Spanish below; other courses send their own (content/course-<code>.json "page").
 const FUNCTION_URL = 'https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/family';
 const MAX_SECONDS = 15;
 
+const SPANISH = {
+  locale: 'es',
+  loading: 'Cargando…',
+  missingLinkTitle: 'Falta el enlace',
+  missingLinkBody: 'Abre el enlace completo que te mandó la familia.',
+  deadLinkTitle: 'Este enlace ya no funciona',
+  deadLinkBody: 'Pídele a la familia un enlace nuevo.',
+  offlineTitle: 'No pudimos conectarnos',
+  offlineBody: 'Revisa tu internet y vuelve a abrir el enlace.',
+  hello: '¡Hola, {name}! 💛',
+  intro: 'Graba tu voz para <b>{kid}</b>. Cuando {kid} practique español en la app, va a escuchar <b>tu voz</b> en estas frases.',
+  tip: '👉 La primera vez, el teléfono te pide permiso para usar el micrófono: toca <b>Permitir</b>. Después toca <b>Grabar</b>, di la frase con cariño, como se la dirías a {kid}, y toca <b>Parar</b>. Puedes escucharla antes de guardarla.',
+  messagesFrom: '💌 Mensajes de {kid}',
+  toRecord: '🎙️ Frases para grabar',
+  noPhrases: 'Por ahora no hay frases. ¡Vuelve pronto!',
+  privacy: 'Solo la familia de {kid} tiene este enlace. Las grabaciones son privadas.',
+  newBadge: '¡Nuevo!',
+  recorded: '✅ Grabada',
+  saved: '✅ ¡Guardada! Gracias',
+  record: '🎙️ Grabar',
+  recordAgain: '🔁 Grabar otra vez',
+  delete: '🗑️ Borrar',
+  stop: '⏹️ Parar',
+  save: '✅ Guardar',
+  again: '🔁 Otra vez',
+  saving: 'Guardando…',
+  micNeeded: 'Necesitamos el micrófono. Permite el micrófono para esta página e inténtalo otra vez.',
+  micReady: '✅ ¡Micrófono listo! Toca <b>Grabar</b> y habla enseguida.',
+  saveFailed: 'No se pudo guardar. Revisa tu internet e inténtalo otra vez.',
+  deleteFailed: 'No se pudo borrar. Inténtalo otra vez.',
+  keepGoing: '¡Muy bien! Sigue con la próxima frase 👇',
+  progress: 'Grabaste {done} de {total}',
+  nextTag: '👉 Sigue esta',
+  thanksTitle: '¡Gracias, {name}!',
+  thanksOne: '{kid} va a escuchar <b>tu voz</b> en una frase de sus lecciones de español.',
+  thanksMany: '{kid} va a escuchar <b>tu voz</b> en {count} frases de sus lecciones de español.',
+  thanksNone: 'Cuando grabes una frase, {kid} va a escuchar tu voz en sus lecciones.',
+  thanksAll: 'Ya grabaste todas las frases. Ya puedes cerrar esta página.',
+  thanksSome: 'Puedes grabar las demás cuando quieras. Ya puedes cerrar esta página.',
+  saveLink: 'Guarda el mensaje con este enlace: cuando vuelvas habrá frases nuevas, y aquí vas a escuchar los mensajes de voz de {kid}.',
+  done: '👋 Terminé por hoy',
+  speakers: {
+    Abuela: '👵 La dice Abuela', Abuelo: '👴 La dice Abuelo', 'Mamá': '👩 La dice Mamá',
+    'Papá': '👨 La dice Papá', 'Tía': '👩 La dice la tía', 'Tío': '👨 La dice el tío',
+  },
+};
+
+// Before the server answers we don't know the family's language: show these messages in both
+const BEFORE_LOAD_HT = {
+  missingLinkTitle: 'Lyen an pa konplè',
+  missingLinkBody: 'Louvri tout lyen fanmi an te voye ba ou a.',
+  deadLinkTitle: 'Lyen sa a pa mache ankò',
+  deadLinkBody: 'Mande fanmi an yon nouvo lyen.',
+  offlineTitle: 'Nou pa ka konekte',
+  offlineBody: 'Tcheke entènèt ou epi louvri lyen an ankò.',
+};
+
+let S = SPANISH;
 const app = document.getElementById('app');
 const token = new URLSearchParams(location.hash.slice(1)).get('t') || '';
 let data = null;
+
+/** A page word with {placeholders} filled in. Words may contain <b>, so values are escaped. */
+const say = (key, values = {}) =>
+  String(S[key] ?? SPANISH[key] ?? '').replace(/\{(\w+)\}/g, (_, k) => esc(values[k] ?? ''));
 
 // One microphone for the whole visit. The first tap on "Grabar" only asks
 // for permission; recording starts on the next tap, so it never begins
@@ -112,36 +175,42 @@ async function call(body) {
   return res.json();
 }
 
-function showMessage(emoji, title, body) {
-  app.innerHTML = `<div class="center"><div class="big">${emoji}</div><h1>${esc(title)}</h1><p class="soft">${esc(body)}</p></div>`;
+function showMessage(emoji, titleKey, bodyKey, bothLanguages = false) {
+  const two = bothLanguages
+    ? `<hr style="border:0;border-top:2px solid var(--border);margin:24px 0"><h2>${esc(BEFORE_LOAD_HT[titleKey])}</h2><p class="soft">${esc(BEFORE_LOAD_HT[bodyKey])}</p>`
+    : '';
+  app.innerHTML = `<div class="center"><div class="big">${emoji}</div><h1>${say(titleKey)}</h1><p class="soft">${say(bodyKey)}</p>${two}</div>`;
 }
 
 async function load() {
-  if (!token) return showMessage('🔗', 'Falta el enlace', 'Abre el enlace completo que te mandó la familia.');
+  if (!token) return showMessage('🔗', 'missingLinkTitle', 'missingLinkBody', true);
   try {
     data = await call({ action: 'open' });
+    S = { ...SPANISH, ...(data.page ?? {}), speakers: { ...SPANISH.speakers, ...(data.page?.speakers ?? {}) } };
+    document.documentElement.lang = data.course || 'es';
     render();
   } catch (e) {
-    if (e.message === 'link') showMessage('🔒', 'Este enlace ya no funciona', 'Pídele a la familia un enlace nuevo.');
-    else showMessage('📶', 'No pudimos conectarnos', 'Revisa tu internet y vuelve a abrir el enlace.');
+    const known = !!data;
+    if (e.message === 'link') showMessage('🔒', 'deadLinkTitle', 'deadLinkBody', !known);
+    else showMessage('📶', 'offlineTitle', 'offlineBody', !known);
   }
 }
 
 function render() {
-  const kid = esc(data.kid.nickname);
+  const kid = data.kid.nickname;
   const todo = data.phrases.filter((p) => !p.recorded).length;
   app.innerHTML = `
-    <div class="brand">¡Habla!</div>
-    <h1>¡Hola, ${esc(data.link.name)}! 💛</h1>
-    <p>Graba tu voz para <b>${kid}</b>. Cuando ${kid} practique español en la app, va a escuchar <b>tu voz</b> en estas frases.</p>
-    <div class="tip">👉 La primera vez, el teléfono te pide permiso para usar el micrófono: toca <b>Permitir</b>. Después toca <b>Grabar</b>, di la frase con cariño, como se la dirías a ${kid}, y toca <b>Parar</b>. Puedes escucharla antes de guardarla.</div>
-    ${data.replies.length ? `<h2>💌 Mensajes de ${kid}</h2>${data.replies.map(replyCard).join('')}` : ''}
-    <h2>🎙️ Frases para grabar ${todo ? `<span class="soft">(${todo})</span>` : ''}</h2>
+    <div class="brand">FamilySpeak</div>
+    <h1>${say('hello', { name: data.link.name })}</h1>
+    <p>${say('intro', { kid })}</p>
+    <div class="tip">${say('tip', { kid })}</div>
+    ${data.replies.length ? `<h2>${say('messagesFrom', { kid })}</h2>${data.replies.map(replyCard).join('')}` : ''}
+    <h2>${say('toRecord')} ${todo ? `<span class="soft">(${todo})</span>` : ''}</h2>
     ${data.phrases.length ? '<div class="progress" id="progress"></div>' : ''}
-    ${data.phrases.length ? data.phrases.map(phraseCard).join('') : `<p class="soft">Por ahora no hay frases. ¡Vuelve pronto!</p>`}
+    ${data.phrases.length ? data.phrases.map(phraseCard).join('') : `<p class="soft">${say('noPhrases')}</p>`}
     <div id="thanks"></div>
-    ${data.phrases.length ? '<div class="finish"><button class="plain" id="finish">👋 Terminé por hoy</button></div>' : ''}
-    <p class="soft" style="font-size:14px;margin-top:32px">Solo la familia de ${kid} tiene este enlace. Las grabaciones son privadas.</p>`;
+    ${data.phrases.length ? `<div class="finish"><button class="plain" id="finish">${say('done')}</button></div>` : ''}
+    <p class="soft" style="font-size:14px;margin-top:32px">${say('privacy', { kid })}</p>`;
   data.phrases.forEach((p, i) => wirePhrase(p, i));
   const finish = document.getElementById('finish');
   if (finish) finish.addEventListener('click', () => showThanks(true));
@@ -157,7 +226,7 @@ function updateProgress(scroll) {
   if (!box) return;
   const total = data.phrases.length;
   const done = data.phrases.filter((p) => p.recorded).length;
-  box.innerHTML = `<b>Grabaste ${done} de ${total}</b> ${done === total ? '🎉' : ''}<div class="bar"><div style="width:${Math.round((done / total) * 100)}%"></div></div>`;
+  box.innerHTML = `<b>${say('progress', { done, total })}</b> ${done === total ? '🎉' : ''}<div class="bar"><div style="width:${Math.round((done / total) * 100)}%"></div></div>`;
   document.querySelectorAll('.card.next').forEach((c) => {
     c.classList.remove('next');
     c.querySelector('.nextTag')?.remove();
@@ -169,35 +238,38 @@ function updateProgress(scroll) {
   }
   const card = document.getElementById('p' + next);
   card.classList.add('next');
-  card.insertAdjacentHTML('afterbegin', '<div class="nextTag">👉 Sigue esta</div>');
+  card.insertAdjacentHTML('afterbegin', `<div class="nextTag">${say('nextTag')}</div>`);
   if (scroll) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function showThanks(scroll) {
-  const kid = esc(data.kid.nickname);
+  const kid = data.kid.nickname;
   const done = data.phrases.filter((p) => p.recorded).length;
   const all = done === data.phrases.length;
   const box = document.getElementById('thanks');
   box.innerHTML = `<div class="thanks"><div class="big">${all ? '🎉💛' : '💛'}</div>
-    <h2 style="margin-top:4px">¡Gracias, ${esc(data.link.name)}!</h2>
-    <p>${done
-      ? `${kid} va a escuchar <b>tu voz</b> en ${done === 1 ? 'una frase' : done + ' frases'} de sus lecciones de español.`
-      : `Cuando grabes una frase, ${kid} va a escuchar tu voz en sus lecciones.`}</p>
-    <p>${all ? 'Ya grabaste todas las frases. ' : 'Puedes grabar las demás cuando quieras. '}Ya puedes cerrar esta página.</p>
-    <p class="soft">Guarda el mensaje con este enlace: cuando vuelvas habrá frases nuevas, y aquí vas a escuchar los mensajes de voz de ${kid}.</p>
+    <h2 style="margin-top:4px">${say('thanksTitle', { name: data.link.name })}</h2>
+    <p>${done ? say(done === 1 ? 'thanksOne' : 'thanksMany', { kid, count: done }) : say('thanksNone', { kid })}</p>
+    <p>${say(all ? 'thanksAll' : 'thanksSome')}</p>
+    <p class="soft">${say('saveLink', { kid })}</p>
   </div>`;
   if (scroll) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function replyCard(r) {
-  const when = new Date(r.createdAt).toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' });
-  return `<div class="reply">${r.heard ? '' : '<span class="badge">¡Nuevo!</span> '}<span class="soft">${esc(when)}</span>
+  let when;
+  try {
+    when = new Date(r.createdAt).toLocaleDateString(S.locale || 'es', { weekday: 'long', day: 'numeric', month: 'long' });
+  } catch {
+    when = new Date(r.createdAt).toLocaleDateString();
+  }
+  return `<div class="reply">${r.heard ? '' : `<span class="badge">${say('newBadge')}</span> `}<span class="soft">${esc(when)}</span>
     ${r.url ? `<audio controls preload="none" src="${esc(r.url)}" data-reply="${esc(r.id)}"></audio>` : ''}</div>`;
 }
 
 function phraseCard(p, i) {
   return `<div class="card ${p.recorded ? 'done' : ''}" id="p${i}">
-    <div class="who">${esc(speakerLabel(p.speaker))} ${p.recorded ? '· <b style="color:var(--leaf)">✅ Grabada</b>' : ''}</div>
+    <div class="who">${esc(speakerLabel(p.speaker))} ${p.recorded ? `· <b style="color:var(--leaf)">${say('recorded')}</b>` : ''}</div>
     <div class="line">${esc(p.text)}</div>
     <div class="row" data-controls></div>
     <div class="error" data-error></div>
@@ -205,7 +277,7 @@ function phraseCard(p, i) {
 }
 
 function speakerLabel(s) {
-  return { 'Abuela': '👵 La dice Abuela', 'Abuelo': '👴 La dice Abuelo', 'Mamá': '👩 La dice Mamá', 'Papá': '👨 La dice Papá', 'Tía': '👩 La dice la tía', 'Tío': '👨 La dice el tío' }[s] || '';
+  return (S.speakers && S.speakers[s]) || '';
 }
 
 // Each phrase: idle → recording → review (listen, save, redo) → saved
@@ -217,19 +289,19 @@ function wirePhrase(p, i) {
 
   const idle = () => {
     controls.innerHTML = p.recorded
-      ? `<button class="plain" data-act="record">🔁 Grabar otra vez</button><button class="plain" data-act="delete">🗑️ Borrar</button>`
-      : `<button data-act="record">🎙️ Grabar</button>`;
+      ? `<button class="plain" data-act="record">${say('recordAgain')}</button><button class="plain" data-act="delete">${say('delete')}</button>`
+      : `<button data-act="record">${say('record')}</button>`;
   };
   const start = async () => {
     error.textContent = '';
     if (!micReady()) {
       // First time: just turn the microphone on, then wait for a fresh tap
       if (!(await openMic())) {
-        error.textContent = 'Necesitamos el micrófono. Permite el micrófono para esta página e inténtalo otra vez.';
+        error.innerHTML = say('micNeeded');
         return;
       }
-      controls.innerHTML = `<button data-act="record">🎙️ Grabar</button>`;
-      error.innerHTML = '<span style="color:var(--leaf)">✅ ¡Micrófono listo! Toca <b>Grabar</b> y habla enseguida.</span>';
+      controls.innerHTML = `<button data-act="record">${say('record')}</button>`;
+      error.innerHTML = `<span style="color:var(--leaf)">${say('micReady')}</span>`;
       return;
     }
     const type = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm'].find((t) => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
@@ -243,7 +315,7 @@ function wirePhrase(p, i) {
     };
     recorder.start();
     let left = MAX_SECONDS;
-    controls.innerHTML = `<button class="recording" data-act="stop">⏹️ Parar</button><span class="timer">🔴 ${left}</span>`;
+    controls.innerHTML = `<button class="recording" data-act="stop">${say('stop')}</button><span class="timer">🔴 ${left}</span>`;
     timer = setInterval(() => {
       left -= 1;
       const t = controls.querySelector('.timer');
@@ -255,12 +327,12 @@ function wirePhrase(p, i) {
   const review = () => {
     const url = URL.createObjectURL(blob);
     controls.innerHTML = `<audio controls src="${url}"></audio>
-      <button class="teal" data-act="save">✅ Guardar</button><button class="plain" data-act="record">🔁 Otra vez</button>`;
+      <button class="teal" data-act="save">${say('save')}</button><button class="plain" data-act="record">${say('again')}</button>`;
   };
 
   const save = async (btn) => {
     btn.disabled = true;
-    btn.textContent = 'Guardando…';
+    btn.textContent = S.saving;
     error.textContent = '';
     const form = new FormData();
     form.append('action', 'record');
@@ -269,19 +341,19 @@ function wirePhrase(p, i) {
     form.append('audio', blob, 'voz.' + (blob.type.includes('webm') ? 'webm' : 'm4a'));
     try {
       const res = await fetch(FUNCTION_URL, { method: 'POST', body: form });
-      if (res.status === 404) return showMessage('🔒', 'Este enlace ya no funciona', 'Pídele a la familia un enlace nuevo.');
+      if (res.status === 404) return showMessage('🔒', 'deadLinkTitle', 'deadLinkBody');
       if (!res.ok) throw new Error();
       p.recorded = true;
       card.classList.add('done');
-      card.querySelector('.who').innerHTML = `${esc(speakerLabel(p.speaker))} · <b style="color:var(--leaf)">✅ ¡Guardada! Gracias</b>`;
+      card.querySelector('.who').innerHTML = `${esc(speakerLabel(p.speaker))} · <b style="color:var(--leaf)">${say('saved')}</b>`;
       idle();
       const more = data.phrases.some((x) => !x.recorded);
-      error.innerHTML = more ? '<span style="color:var(--leaf)">¡Muy bien! Sigue con la próxima frase 👇</span>' : '';
+      error.innerHTML = more ? `<span style="color:var(--leaf)">${say('keepGoing')}</span>` : '';
       setTimeout(() => updateProgress(true), more ? 900 : 300);
     } catch {
       btn.disabled = false;
-      btn.textContent = '✅ Guardar';
-      error.textContent = 'No se pudo guardar. Revisa tu internet e inténtalo otra vez.';
+      btn.innerHTML = say('save');
+      error.innerHTML = say('saveFailed');
     }
   };
 
@@ -297,7 +369,7 @@ function wirePhrase(p, i) {
       updateProgress(false);
     } catch {
       btn.disabled = false;
-      error.textContent = 'No se pudo borrar. Inténtalo otra vez.';
+      error.innerHTML = say('deleteFailed');
     }
   };
 
