@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>FamilySpeak · Voces de la familia · Vwa fanmi an</title>
+  <style>
+    /* Fonts come from this site (not Google), so family members' visits stay private */
+    @font-face { font-family: Fredoka; font-weight: 600; font-display: swap; src: url(../assets/fonts/Fredoka_600SemiBold.ttf) format('truetype'); }
+    @font-face { font-family: Fredoka; font-weight: 700; font-display: swap; src: url(../assets/fonts/Fredoka_700Bold.ttf) format('truetype'); }
+    @font-face { font-family: Nunito; font-weight: 600; font-display: swap; src: url(../assets/fonts/Nunito_600SemiBold.ttf) format('truetype'); }
+    @font-face { font-family: Nunito; font-weight: 800; font-display: swap; src: url(../assets/fonts/Nunito_800ExtraBold.ttf) format('truetype'); }
+    :root {
+      --bg: #FFF7E6; --surface: #FFFFFF; --border: #F0E2C4;
+      --text: #2B2D42; --soft: #6B6F80;
+      --coral: #FF6B4A; --coral-dark: #D9502F; --teal: #2EC4B6; --teal-dark: #1F9A8F;
+      --sun: #FFC93C; --sun-soft: #FFF2C2; --leaf: #34C759; --leaf-soft: #E3F9E9;
+      --danger: #E5484D; --info-soft: #E6F0FF;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 600 18px/1.45 Nunito, -apple-system, system-ui, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+    main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+    h1, h2 { font-family: Fredoka, sans-serif; margin: 0; line-height: 1.2; }
+    h1 { font-size: 30px; }
+    h2 { font-size: 22px; margin-top: 28px; }
+    .brand { font: 700 28px Fredoka, sans-serif; color: var(--coral); }
+    .soft { color: var(--soft); }
+    .card {
+      background: var(--surface); border: 2px solid var(--border); border-bottom-width: 4px;
+      border-radius: 20px; padding: 16px; margin-top: 12px;
+    }
+    .card.done { border-color: var(--leaf); background: var(--leaf-soft); }
+    .who { font-size: 14px; color: var(--soft); }
+    .line { font: 600 24px/1.3 Fredoka, sans-serif; margin: 4px 0 12px; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    button {
+      font: 700 18px Fredoka, sans-serif; border: 0; border-radius: 999px; cursor: pointer;
+      padding: 12px 18px; min-height: 48px; color: #fff; background: var(--coral);
+      border-bottom: 4px solid var(--coral-dark);
+    }
+    button:active { transform: scale(0.97); }
+    button:disabled { opacity: 0.5; }
+    button.teal { background: var(--teal); border-bottom-color: var(--teal-dark); }
+    button.plain { background: var(--surface); color: var(--text); border: 2px solid var(--border); border-bottom-width: 4px; }
+    button.recording { background: var(--danger); border-bottom-color: #B3262B; animation: pulse 1s infinite; }
+    @keyframes pulse { 50% { transform: scale(1.04); } }
+    .timer { font: 700 18px Fredoka, sans-serif; color: var(--danger); }
+    .tip { background: var(--sun-soft); border-radius: 16px; padding: 12px 14px; margin-top: 16px; }
+    .reply { background: var(--info-soft); border-radius: 16px; padding: 12px; margin-top: 10px; }
+    .reply audio { width: 100%; margin-top: 6px; }
+    .badge { display: inline-block; font-size: 14px; padding: 2px 10px; border-radius: 999px; background: var(--leaf); color: #fff; }
+    .center { text-align: center; padding-top: 40px; }
+    .big { font-size: 64px; }
+    .error { color: var(--danger); font-size: 16px; margin-top: 8px; }
+    audio { max-width: 100%; }
+    .progress { position: sticky; top: 0; z-index: 2; margin: 16px -16px 0; padding: 10px 16px; background: var(--bg); border-bottom: 2px solid var(--border); }
+    .bar { height: 12px; border-radius: 999px; background: var(--border); overflow: hidden; margin-top: 6px; }
+    .bar > div { height: 100%; background: var(--leaf); border-radius: 999px; transition: width .4s; }
+    .card.next { border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255,107,74,.18); }
+    .nextTag { display: inline-block; font-size: 14px; color: #fff; background: var(--coral); border-radius: 999px; padding: 2px 10px; margin-bottom: 6px; }
+    .thanks { background: var(--leaf-soft); border: 2px solid var(--leaf); border-radius: 20px; padding: 18px; margin-top: 16px; text-align: center; }
+    .thanks .big { font-size: 48px; }
+    .finish { margin-top: 24px; text-align: center; }
+  </style>
+</head>
+<body>
+<main id="app">
+  <div class="center"><div class="big">🎙️</div><p class="soft">…</p></div>
+</main>
+
+<script>
+// FamilySpeak family voice page. Source: habla-app/web/familia/index.html
+// The secret part of the link (#t=…) never leaves this page except to the FamilySpeak server.
+// Words: Spanish below; other courses send their own (content/course-<code>.json "page").
+const FUNCTION_URL = 'https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/family';
+const MAX_SECONDS = 15;
+
+const SPANISH = {
+  locale: 'es',
+  loading: 'Cargando…',
+  missingLinkTitle: 'Falta el enlace',
+  missingLinkBody: 'Abre el enlace completo que te mandó la familia.',
+  deadLinkTitle: 'Este enlace ya no funciona',
+  deadLinkBody: 'Pídele a la familia un enlace nuevo.',
+  offlineTitle: 'No pudimos conectarnos',
+  offlineBody: 'Revisa tu internet y vuelve a abrir el enlace.',
+  hello: '¡Hola, {name}! 💛',
+  intro: 'Graba tu voz para <b>{kid}</b>. Cuando {kid} practique español en la app, va a escuchar <b>tu voz</b> en estas frases.',
+  tip: '👉 La primera vez, el teléfono te pide permiso para usar el micrófono: toca <b>Permitir</b>. Después toca <b>Grabar</b>, di la frase con cariño, como se la dirías a {kid}, y toca <b>Parar</b>. Puedes escucharla antes de guardarla.',
+  messagesFrom: '💌 Mensajes de {kid}',
+  toRecord: '🎙️ Frases para grabar',
+  noPhrases: 'Por ahora no hay frases. ¡Vuelve pronto!',
+  privacy: 'Solo la familia de {kid} tiene este enlace. Las grabaciones son privadas.',
+  privacyLink: 'Política de privacidad',
+  newBadge: '¡Nuevo!',
+  recorded: '✅ Grabada',
+  saved: '✅ ¡Guardada! Gracias',
+  record: '🎙️ Grabar',
+  recordAgain: '🔁 Grabar otra vez',
+  delete: '🗑️ Borrar',
+  stop: '⏹️ Parar',
+  save: '✅ Guardar',
+  again: '🔁 Otra vez',
+  saving: 'Guardando…',
+  micNeeded: 'Necesitamos el micrófono. Permite el micrófono para esta página e inténtalo otra vez.',
+  micReady: '✅ ¡Micrófono listo! Toca <b>Grabar</b> y habla enseguida.',
+  saveFailed: 'No se pudo guardar. Revisa tu internet e inténtalo otra vez.',
+  deleteFailed: 'No se pudo borrar. Inténtalo otra vez.',
+  keepGoing: '¡Muy bien! Sigue con la próxima frase 👇',
+  progress: 'Grabaste {done} de {total}',
+  nextTag: '👉 Sigue esta',
+  thanksTitle: '¡Gracias, {name}!',
+  thanksOne: '{kid} va a escuchar <b>tu voz</b> en una frase de sus lecciones de español.',
+  thanksMany: '{kid} va a escuchar <b>tu voz</b> en {count} frases de sus lecciones de español.',
+  thanksNone: 'Cuando grabes una frase, {kid} va a escuchar tu voz en sus lecciones.',
+  thanksAll: 'Ya grabaste todas las frases. Ya puedes cerrar esta página.',
+  thanksSome: 'Puedes grabar las demás cuando quieras. Ya puedes cerrar esta página.',
+  saveLink: 'Guarda el mensaje con este enlace: cuando vuelvas habrá frases nuevas, y aquí vas a escuchar los mensajes de voz de {kid}.',
+  done: '👋 Terminé por hoy',
+  speakers: {
+    Abuela: '👵 La dice Abuela', Abuelo: '👴 La dice Abuelo', 'Mamá': '👩 La dice Mamá',
+    'Papá': '👨 La dice Papá', 'Tía': '👩 La dice la tía', 'Tío': '👨 La dice el tío',
+  },
+};
+
+// Before the server answers we don't know the family's language: show these messages in both
+const BEFORE_LOAD_HT = {
+  missingLinkTitle: 'Lyen an pa konplè',
+  missingLinkBody: 'Louvri tout lyen fanmi an te voye ba ou a.',
+  deadLinkTitle: 'Lyen sa a pa mache ankò',
+  deadLinkBody: 'Mande fanmi an yon nouvo lyen.',
+  offlineTitle: 'Nou pa ka konekte',
+  offlineBody: 'Tcheke entènèt ou epi louvri lyen an ankò.',
+};
+
+let S = SPANISH;
+const app = document.getElementById('app');
+const token = new URLSearchParams(location.hash.slice(1)).get('t') || '';
+let data = null;
+
+/** A page word with {placeholders} filled in. Words may contain <b>, so values are escaped. */
+const say = (key, values = {}) =>
+  String(S[key] ?? SPANISH[key] ?? '').replace(/\{(\w+)\}/g, (_, k) => esc(values[k] ?? ''));
+
+// One microphone for the whole visit. The first tap on "Grabar" only asks
+// for permission; recording starts on the next tap, so it never begins
+// while the permission popup is still open (no silence at the start).
+let micStream = null;
+const micReady = () => !!micStream && micStream.getAudioTracks().some((t) => t.readyState === 'live');
+async function openMic() {
+  if (micReady()) return true;
+  try {
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    return true;
+  } catch {
+    micStream = null;
+    return false;
+  }
+}
+window.addEventListener('pagehide', () => micStream && micStream.getTracks().forEach((t) => t.stop()));
+
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+async function call(body) {
+  const res = await fetch(FUNCTION_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, ...body }),
+  });
+  if (res.status === 404) throw new Error('link');
+  if (!res.ok) throw new Error('server');
+  return res.json();
+}
+
+function showMessage(emoji, titleKey, bodyKey, bothLanguages = false) {
+  const two = bothLanguages
+    ? `<hr style="border:0;border-top:2px solid var(--border);margin:24px 0"><h2>${esc(BEFORE_LOAD_HT[titleKey])}</h2><p class="soft">${esc(BEFORE_LOAD_HT[bodyKey])}</p>`
+    : '';
+  app.innerHTML = `<div class="center"><div class="big">${emoji}</div><h1>${say(titleKey)}</h1><p class="soft">${say(bodyKey)}</p>${two}<p class="soft" style="font-size:14px;margin-top:32px"><a href="../privacy/" target="_blank" rel="noopener">${say('privacyLink')}${bothLanguages ? ' · Règ konfidansyalite' : ''}</a></p></div>`;
+}
+
+async function load() {
+  if (!token) return showMessage('🔗', 'missingLinkTitle', 'missingLinkBody', true);
+  try {
+    data = await call({ action: 'open' });
+    S = { ...SPANISH, ...(data.page ?? {}), speakers: { ...SPANISH.speakers, ...(data.page?.speakers ?? {}) } };
+    document.documentElement.lang = data.course || 'es';
+    render();
+  } catch (e) {
+    const known = !!data;
+    if (e.message === 'link') showMessage('🔒', 'deadLinkTitle', 'deadLinkBody', !known);
+    else showMessage('📶', 'offlineTitle', 'offlineBody', !known);
+  }
+}
+
+function render() {
+  const kid = data.kid.nickname;
+  const todo = data.phrases.filter((p) => !p.recorded).length;
+  app.innerHTML = `
+    <div class="brand">FamilySpeak</div>
+    <h1>${say('hello', { name: data.link.name })}</h1>
+    <p>${say('intro', { kid })}</p>
+    <div class="tip">${say('tip', { kid })}</div>
+    ${data.replies.length ? `<h2>${say('messagesFrom', { kid })}</h2>${data.replies.map(replyCard).join('')}` : ''}
+    <h2>${say('toRecord')} ${todo ? `<span class="soft">(${todo})</span>` : ''}</h2>
+    ${data.phrases.length ? '<div class="progress" id="progress"></div>' : ''}
+    ${data.phrases.length ? data.phrases.map(phraseCard).join('') : `<p class="soft">${say('noPhrases')}</p>`}
+    <div id="thanks"></div>
+    ${data.phrases.length ? `<div class="finish"><button class="plain" id="finish">${say('done')}</button></div>` : ''}
+    <p class="soft" style="font-size:14px;margin-top:32px">${say('privacy', { kid })} <a href="../privacy/" target="_blank" rel="noopener">${say('privacyLink')}</a></p>`;
+  data.phrases.forEach((p, i) => wirePhrase(p, i));
+  const finish = document.getElementById('finish');
+  if (finish) finish.addEventListener('click', () => showThanks(true));
+  updateProgress(false);
+  app.querySelectorAll('audio[data-reply]').forEach((el) => {
+    el.addEventListener('play', () => call({ action: 'heard', replyId: el.dataset.reply }).catch(() => {}), { once: true });
+  });
+}
+
+// After each save: show progress, point to the next line, or say thank you
+function updateProgress(scroll) {
+  const box = document.getElementById('progress');
+  if (!box) return;
+  const total = data.phrases.length;
+  const done = data.phrases.filter((p) => p.recorded).length;
+  box.innerHTML = `<b>${say('progress', { done, total })}</b> ${done === total ? '🎉' : ''}<div class="bar"><div style="width:${Math.round((done / total) * 100)}%"></div></div>`;
+  document.querySelectorAll('.card.next').forEach((c) => {
+    c.classList.remove('next');
+    c.querySelector('.nextTag')?.remove();
+  });
+  const next = data.phrases.findIndex((p) => !p.recorded);
+  if (next === -1) {
+    showThanks(scroll);
+    return;
+  }
+  const card = document.getElementById('p' + next);
+  card.classList.add('next');
+  card.insertAdjacentHTML('afterbegin', `<div class="nextTag">${say('nextTag')}</div>`);
+  if (scroll) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function showThanks(scroll) {
+  const kid = data.kid.nickname;
+  const done = data.phrases.filter((p) => p.recorded).length;
+  const all = done === data.phrases.length;
+  const box = document.getElementById('thanks');
+  box.innerHTML = `<div class="thanks"><div class="big">${all ? '🎉💛' : '💛'}</div>
+    <h2 style="margin-top:4px">${say('thanksTitle', { name: data.link.name })}</h2>
+    <p>${done ? say(done === 1 ? 'thanksOne' : 'thanksMany', { kid, count: done }) : say('thanksNone', { kid })}</p>
+    <p>${say(all ? 'thanksAll' : 'thanksSome')}</p>
+    <p class="soft">${say('saveLink', { kid })}</p>
+  </div>`;
+  if (scroll) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function replyCard(r) {
+  let when;
+  try {
+    when = new Date(r.createdAt).toLocaleDateString(S.locale || 'es', { weekday: 'long', day: 'numeric', month: 'long' });
+  } catch {
+    when = new Date(r.createdAt).toLocaleDateString();
+  }
+  return `<div class="reply">${r.heard ? '' : `<span class="badge">${say('newBadge')}</span> `}<span class="soft">${esc(when)}</span>
+    ${r.url ? `<audio controls preload="none" src="${esc(r.url)}" data-reply="${esc(r.id)}"></audio>` : ''}</div>`;
+}
+
+function phraseCard(p, i) {
+  return `<div class="card ${p.recorded ? 'done' : ''}" id="p${i}">
+    <div class="who">${esc(speakerLabel(p.speaker))} ${p.recorded ? `· <b style="color:var(--leaf)">${say('recorded')}</b>` : ''}</div>
+    <div class="line">${esc(p.text)}</div>
+    <div class="row" data-controls></div>
+    <div class="error" data-error></div>
+  </div>`;
+}
+
+function speakerLabel(s) {
+  return (S.speakers && S.speakers[s]) || '';
+}
+
+// Each phrase: idle → recording → review (listen, save, redo) → saved
+function wirePhrase(p, i) {
+  const card = document.getElementById('p' + i);
+  const controls = card.querySelector('[data-controls]');
+  const error = card.querySelector('[data-error]');
+  let recorder = null, chunks = [], blob = null, timer = null;
+
+  const idle = () => {
+    controls.innerHTML = p.recorded
+      ? `<button class="plain" data-act="record">${say('recordAgain')}</button><button class="plain" data-act="delete">${say('delete')}</button>`
+      : `<button data-act="record">${say('record')}</button>`;
+  };
+  const start = async () => {
+    error.textContent = '';
+    if (!micReady()) {
+      // First time: just turn the microphone on, then wait for a fresh tap
+      if (!(await openMic())) {
+        error.innerHTML = say('micNeeded');
+        return;
+      }
+      controls.innerHTML = `<button data-act="record">${say('record')}</button>`;
+      error.innerHTML = `<span style="color:var(--leaf)">${say('micReady')}</span>`;
+      return;
+    }
+    const type = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm'].find((t) => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
+    recorder = new MediaRecorder(micStream, type ? { mimeType: type } : undefined);
+    chunks = [];
+    recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+    recorder.onstop = () => {
+      clearInterval(timer);
+      blob = new Blob(chunks, { type: recorder.mimeType || type || 'audio/mp4' });
+      review();
+    };
+    recorder.start();
+    let left = MAX_SECONDS;
+    controls.innerHTML = `<button class="recording" data-act="stop">${say('stop')}</button><span class="timer">🔴 ${left}</span>`;
+    timer = setInterval(() => {
+      left -= 1;
+      const t = controls.querySelector('.timer');
+      if (t) t.textContent = '🔴 ' + left;
+      if (left <= 0) recorder.state === 'recording' && recorder.stop();
+    }, 1000);
+  };
+
+  const review = () => {
+    const url = URL.createObjectURL(blob);
+    controls.innerHTML = `<audio controls src="${url}"></audio>
+      <button class="teal" data-act="save">${say('save')}</button><button class="plain" data-act="record">${say('again')}</button>`;
+  };
+
+  const save = async (btn) => {
+    btn.disabled = true;
+    btn.textContent = S.saving;
+    error.textContent = '';
+    const form = new FormData();
+    form.append('action', 'record');
+    form.append('token', token);
+    form.append('stepId', p.stepId);
+    form.append('audio', blob, 'voz.' + (blob.type.includes('webm') ? 'webm' : 'm4a'));
+    try {
+      const res = await fetch(FUNCTION_URL, { method: 'POST', body: form });
+      if (res.status === 404) return showMessage('🔒', 'deadLinkTitle', 'deadLinkBody');
+      if (!res.ok) throw new Error();
+      p.recorded = true;
+      card.classList.add('done');
+      card.querySelector('.who').innerHTML = `${esc(speakerLabel(p.speaker))} · <b style="color:var(--leaf)">${say('saved')}</b>`;
+      idle();
+      const more = data.phrases.some((x) => !x.recorded);
+      error.innerHTML = more ? `<span style="color:var(--leaf)">${say('keepGoing')}</span>` : '';
+      setTimeout(() => updateProgress(true), more ? 900 : 300);
+    } catch {
+      btn.disabled = false;
+      btn.innerHTML = say('save');
+      error.innerHTML = say('saveFailed');
+    }
+  };
+
+  const remove = async (btn) => {
+    btn.disabled = true;
+    try {
+      await call({ action: 'unrecord', stepId: p.stepId });
+      p.recorded = false;
+      card.classList.remove('done');
+      card.querySelector('.who').textContent = speakerLabel(p.speaker);
+      idle();
+      document.getElementById('thanks').innerHTML = '';
+      updateProgress(false);
+    } catch {
+      btn.disabled = false;
+      error.innerHTML = say('deleteFailed');
+    }
+  };
+
+  controls.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const act = btn.dataset.act;
+    if (act === 'record') start();
+    else if (act === 'stop') recorder && recorder.state === 'recording' && recorder.stop();
+    else if (act === 'save') save(btn);
+    else if (act === 'delete') remove(btn);
+  });
+  idle();
+}
+
+window.addEventListener('hashchange', load);
+load();
+</script>
+</body>
+</html>
