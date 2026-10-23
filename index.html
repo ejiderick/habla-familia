@@ -74,6 +74,23 @@ const app = document.getElementById('app');
 const token = new URLSearchParams(location.hash.slice(1)).get('t') || '';
 let data = null;
 
+// One microphone for the whole visit. The first tap on "Grabar" only asks
+// for permission; recording starts on the next tap, so it never begins
+// while the permission popup is still open (no silence at the start).
+let micStream = null;
+const micReady = () => !!micStream && micStream.getAudioTracks().some((t) => t.readyState === 'live');
+async function openMic() {
+  if (micReady()) return true;
+  try {
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    return true;
+  } catch {
+    micStream = null;
+    return false;
+  }
+}
+window.addEventListener('pagehide', () => micStream && micStream.getTracks().forEach((t) => t.stop()));
+
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 async function call(body) {
@@ -109,7 +126,7 @@ function render() {
     <div class="brand">¡Habla!</div>
     <h1>¡Hola, ${esc(data.link.name)}! 💛</h1>
     <p>Graba tu voz para <b>${kid}</b>. Cuando ${kid} practique español en la app, va a escuchar <b>tu voz</b> en estas frases.</p>
-    <div class="tip">👉 Toca <b>Grabar</b>, di la frase con cariño, como se la dirías a ${kid}, y toca <b>Parar</b>. Puedes escucharla antes de guardarla.</div>
+    <div class="tip">👉 La primera vez, el teléfono te pide permiso para usar el micrófono: toca <b>Permitir</b>. Después toca <b>Grabar</b>, di la frase con cariño, como se la dirías a ${kid}, y toca <b>Parar</b>. Puedes escucharla antes de guardarla.</div>
     ${data.replies.length ? `<h2>💌 Mensajes de ${kid}</h2>${data.replies.map(replyCard).join('')}` : ''}
     <h2>🎙️ Frases para grabar ${todo ? `<span class="soft">(${todo})</span>` : ''}</h2>
     ${data.phrases.length ? data.phrases.map(phraseCard).join('') : `<p class="soft">Por ahora no hay frases. ¡Vuelve pronto!</p>`}
@@ -144,40 +161,41 @@ function wirePhrase(p, i) {
   const card = document.getElementById('p' + i);
   const controls = card.querySelector('[data-controls]');
   const error = card.querySelector('[data-error]');
-  let recorder = null, chunks = [], blob = null, timer = null, stream = null;
+  let recorder = null, chunks = [], blob = null, timer = null;
 
   const idle = () => {
     controls.innerHTML = p.recorded
       ? `<button class="plain" data-act="record">🔁 Grabar otra vez</button><button class="plain" data-act="delete">🗑️ Borrar</button>`
       : `<button data-act="record">🎙️ Grabar</button>`;
   };
-  const stopTracks = () => stream && stream.getTracks().forEach((t) => t.stop());
-
   const start = async () => {
     error.textContent = '';
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    } catch {
-      error.textContent = 'Necesitamos el micrófono. Permite el micrófono para esta página e inténtalo otra vez.';
+    if (!micReady()) {
+      // First time: just turn the microphone on, then wait for a fresh tap
+      if (!(await openMic())) {
+        error.textContent = 'Necesitamos el micrófono. Permite el micrófono para esta página e inténtalo otra vez.';
+        return;
+      }
+      controls.innerHTML = `<button data-act="record">🎙️ Grabar</button>`;
+      error.innerHTML = '<span style="color:var(--leaf)">✅ ¡Micrófono listo! Toca <b>Grabar</b> y habla enseguida.</span>';
       return;
     }
     const type = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm'].find((t) => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
-    recorder = new MediaRecorder(stream, type ? { mimeType: type } : undefined);
+    recorder = new MediaRecorder(micStream, type ? { mimeType: type } : undefined);
     chunks = [];
     recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data);
     recorder.onstop = () => {
-      stopTracks();
       clearInterval(timer);
       blob = new Blob(chunks, { type: recorder.mimeType || type || 'audio/mp4' });
       review();
     };
     recorder.start();
     let left = MAX_SECONDS;
-    controls.innerHTML = `<button class="recording" data-act="stop">⏹️ Parar</button><span class="timer">${left}</span>`;
+    controls.innerHTML = `<button class="recording" data-act="stop">⏹️ Parar</button><span class="timer">🔴 ${left}</span>`;
     timer = setInterval(() => {
       left -= 1;
       const t = controls.querySelector('.timer');
-      if (t) t.textContent = left;
+      if (t) t.textContent = '🔴 ' + left;
       if (left <= 0) recorder.state === 'recording' && recorder.stop();
     }, 1000);
   };
