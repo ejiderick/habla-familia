@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 90" role="img" aria-label="FamilySpeak">
+  <!-- Big Marigold bubble with a small Hibiscus bubble answering it (same shapes as src/components/logo.tsx) -->
+  <rect x="20" y="45" width="20" height="20" rx="4" fill="#FFB21A" transform="rotate(45 30 55)"/>
+  <rect x="0" y="0" width="78" height="59" rx="29.5" fill="#FFB21A"/>
+  <rect x="52.8" y="48.8" width="12" height="12" rx="1.5" fill="#D6336F"/>
+  <rect x="52" y="48" width="44" height="32" rx="16" fill="#D6336F"/>
+</svg>
