@@ -1,10 +1,14 @@
 <!doctype html>
+<!-- Built by scripts/build-site.mjs from web/pages/en/privacy.html. Edit that file, not this one. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Privacy Policy · FamilySpeak</title>
   <meta name="description" content="What FamilySpeak collects about parents and kids, where it goes, and how to delete it.">
+  <link rel="alternate" hreflang="en" href="https://familyspeak.app/privacy/">
+  <link rel="alternate" hreflang="es" href="https://familyspeak.app/es/privacy/">
+  <link rel="alternate" hreflang="ht" href="https://familyspeak.app/ht/privacy/">
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
   <link rel="icon" href="../assets/favicon.png">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -13,19 +17,25 @@
 <body>
   <header class="top">
     <div class="wrap">
-      <a class="logo" href="../"><img src="../assets/logo.svg" alt="" width="44" height="40"><b>FamilySpeak</b></a>
+      <a class="logo" href="../"><img src="../assets/logo.svg" alt="FamilySpeak logo: two speech bubbles" width="44" height="40"><b>FamilySpeak</b></a>
       <nav class="nav" aria-label="Site">
-        <a href="./" aria-current="page">Privacy</a>
+        <a href="../privacy/" aria-current="page">Privacy</a>
         <a href="../terms/">Terms</a>
         <a href="../support/">Support</a>
+      </nav>
+      <nav class="langs" aria-label="Language">
+        <a href="./" lang="en" aria-current="true">English</a>
+        <a href="../es/privacy/" lang="es" hreflang="es">Español</a>
+        <a href="../ht/privacy/" lang="ht" hreflang="ht">Kreyòl</a>
       </nav>
     </div>
   </header>
 
   <main class="wrap narrow doc">
-    <p class="draft"><strong>Draft, to be reviewed by a lawyer before public launch.</strong> This policy covers the FamilySpeak test (TestFlight) version.</p>
+    
+<p class="draft"><strong>Draft, to be reviewed by a lawyer before public launch.</strong> This policy covers the FamilySpeak test (TestFlight) version.</p>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: October 23, 2026</p>
+    <p class="updated">Last updated: October 24, 2026</p>
 
     <p>FamilySpeak is a speaking app for kids 6 to 12. It has two courses: <strong>Habla</strong> (Spanish) and <strong>Pale</strong> (Haitian Creole). Because kids under 13 use it, we follow the US Children’s Online Privacy Protection Act (COPPA). This page explains, in plain words, what we collect, why, who helps us run the app, and how you delete it.</p>
 
@@ -54,7 +64,7 @@
 
     <h3>About each child (entered by the parent)</h3>
     <ul>
-      <li>Nickname (first name or nickname only; the app blocks last names), age (6 to 12), boy or girl (used for Spanish grammar such as <em>lleno / llena</em>), family language (course), Spanish style for Spanish learners, a cartoon buddy, and starting level.</li>
+      <li>Nickname (first name or nickname only; the app blocks last names), age (6 to 12), boy or girl (used for Spanish grammar such as <em>lleno / llena</em>), family language (course), Spanish style for Spanish learners, the buddy’s color and name (the child can keep the name Mo or choose another), and starting level.</li>
     </ul>
 
     <h3>Created while the child uses the app</h3>
@@ -77,6 +87,13 @@
       <li>On the link’s web page, the family member records lines. Those recordings, and up to one voice message a week from the child back to them, are kept in private storage and played only in your child’s app and on that link.</li>
       <li>Anyone with the link can use it, so share it only with family. Removing a link stops it right away and deletes its recordings and messages.</li>
       <li>The family page doesn’t use cookies or ask the family member for an email, phone, or account.</li>
+    </ul>
+
+    <h3 id="signups">“Join the test” sign-ups (familyspeak.app)</h3>
+    <ul>
+      <li>A parent can sign up for the test with the form on familyspeak.app. We store <strong>the parent’s email address, the kids’ ages</strong> (never names), <strong>the family language, whether you have an iPhone</strong>, the website language you used, and when you signed up.</li>
+      <li>We use it only to choose test families, to email you the TestFlight invite (in the language you used), and to write to you about the test. We never sell or share it.</li>
+      <li>Sign-ups aren’t linked to an app account and no IP addresses are stored with them. We keep them until the test ends, then delete them, or sooner if you ask.</li>
     </ul>
 
     <h3 id="requests">Language requests (optional)</h3>
@@ -102,7 +119,7 @@
         <tbody>
           <tr><td><strong>Supabase</strong><br><span class="soft">US (Oregon)</span></td><td>Our database, login, private file storage and server code</td><td>Everything listed above. Files are in private storage; each family can only reach its own data.</td></tr>
           <tr><td><strong>OpenAI</strong><br><span class="soft">US</span></td><td>Speech-to-text, answer checking, the AI grandparent, and the AI voice for Haitian Creole lessons</td><td>The child’s recording and the question. For the AI grandparent, also the child’s nickname, age, boy/girl, and family language. For the AI voice, the lesson line to read aloud (which can include the child’s nickname). We ask OpenAI not to store these requests where its API allows. Under OpenAI’s API policies, this data isn’t used to train its models and may be kept up to 30 days for abuse monitoring.</td></tr>
-          <tr><td><strong>Resend</strong></td><td>Sends the weekly report email (if you leave it on)</td><td>Your email address and the report: kids’ nicknames, lesson numbers, new words and a dinner phrase.</td></tr>
+          <tr><td><strong>Resend</strong></td><td>Sends our emails: the weekly report (if you leave it on) and the test invite</td><td>Your email address and the email: for the report, kids’ nicknames, lesson numbers, new words and a dinner phrase; for the invite, the TestFlight link.</td></tr>
           <tr><td><strong>GitHub Pages</strong></td><td>Hosts this website and the family voice page</td><td>Standard web request information, like IP address, as with any website.</td></tr>
           <tr><td><strong>ImprovMX</strong></td><td>Forwards email sent to hello@familyspeak.app</td><td>Messages you send us.</td></tr>
           <tr><td><strong>Apple</strong></td><td>TestFlight, for test versions of the app</td><td>Anything you choose to send through TestFlight feedback, and crash reports, under Apple’s own privacy policy.</td></tr>
@@ -115,18 +132,19 @@
     <ul>
       <li>To run lessons, check answers, and adapt lessons to each child’s level.</li>
       <li>To show the parent area and weekly report, and send the weekly email you can turn off.</li>
+      <li>To choose test families and send test invites.</li>
       <li>To make speech checking and lessons better during the test.</li>
       <li>We never use children’s data for ads, and never contact children directly.</li>
     </ul>
 
     <h2>5. How long we keep it</h2>
-    <p>We keep your family’s data while your account is open, so progress isn’t lost if you take a break or a trial ends. Delete it anytime as described below. When the test ends, we will tell test families what happens to their accounts, and we will delete test data on request.</p>
+    <p>We keep your family’s data while your account is open, so progress isn’t lost if you take a break or a trial ends. Delete it anytime as described below. When the test ends, we will tell test families what happens to their accounts, and we will delete test data on request. Test sign-ups from the website are deleted when the test ends.</p>
 
     <h2>6. How to delete data</h2>
     <ul>
       <li><strong>One child:</strong> Parent area → tap the child → <em>Delete [name]’s data</em>. This deletes the profile, progress, answers and transcripts, saved recordings, family voice recordings and messages, and AI-voiced lines with their name.</li>
       <li><strong>Whole account:</strong> Parent area → Account → <em>Delete my account</em>. This deletes all of the above for every child, plus your login, settings, permission record and language requests.</li>
-      <li><strong>A language request from the website:</strong> email us from the address you gave and we’ll delete it.</li>
+      <li><strong>A test sign-up or a language request from the website:</strong> email us from the address you gave and we’ll delete it.</li>
       <li>Or email <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a> from your account email and we’ll do it for you.</li>
     </ul>
     <p>Deletion is immediate in the app. Copies in our providers’ backups are removed as those backups expire. Emails already sent can’t be unsent.</p>
@@ -134,7 +152,7 @@
     <h2>7. Keeping it safe</h2>
     <ul>
       <li>Everything travels over encrypted connections (HTTPS).</li>
-      <li>Database rules let each parent reach only their own family’s data; recordings are in private storage.</li>
+      <li>Database rules let each parent reach only their own family’s data; recordings are in private storage. Only our admin can see test sign-ups.</li>
       <li>Secret keys for our providers stay on our server, never in the app.</li>
       <li>The parent area sits behind a grown-ups-only question, so kids can’t change settings.</li>
     </ul>
@@ -150,7 +168,7 @@
 
   <footer class="foot">
     <div class="wrap">
-      <span>© 2026 FamilySpeak · <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a></span>
+      <span>© 2026 FamilySpeak · LeadGendary Services LLC · <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a></span>
       <nav aria-label="Legal">
         <a href="../">Home</a>
         <a href="../terms/">Terms</a>

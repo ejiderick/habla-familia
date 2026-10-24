@@ -1,10 +1,14 @@
 <!doctype html>
+<!-- Built by scripts/build-site.mjs from web/pages/en/home.html. Edit that file, not this one. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>FamilySpeak</title>
   <meta name="description" content="FamilySpeak helps kids 6 to 12 who understand their family's language start speaking it back. Habla (Spanish) and Pale (Haitian Creole).">
+  <link rel="alternate" hreflang="en" href="https://familyspeak.app/">
+  <link rel="alternate" hreflang="es" href="https://familyspeak.app/es/">
+  <link rel="alternate" hreflang="ht" href="https://familyspeak.app/ht/">
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
   <link rel="icon" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -17,23 +21,46 @@
 <body>
   <header class="top">
     <div class="wrap">
-      <a class="logo" href="./"><img src="assets/logo.svg" alt="" width="44" height="40"><b>FamilySpeak</b></a>
+      <a class="logo" href="./"><img src="assets/logo.svg" alt="FamilySpeak logo: two speech bubbles" width="44" height="40"><b>FamilySpeak</b></a>
       <nav class="nav" aria-label="Site">
         <a href="#courses">Courses</a>
         <a href="#join">Join the test</a>
         <a href="#request">Request a language</a>
         <a href="support/">Support</a>
       </nav>
+      <nav class="langs" aria-label="Language">
+        <a href="./" lang="en" aria-current="true">English</a>
+        <a href="es/" lang="es" hreflang="es">Español</a>
+        <a href="ht/" lang="ht" hreflang="ht">Kreyòl</a>
+      </nav>
     </div>
   </header>
 
-  <main>
-    <div class="wrap">
+  <main class="">
+<div class="wrap">
       <section class="hero">
-        <img class="mark" src="assets/logo.svg" alt="" width="96" height="86">
-        <h1>Your kid understands your family’s language. <em>Now they’ll speak it back.</em></h1>
+        <div class="hero-row">
+          <div class="hero-text">
+            <h1>Your kid understands your family’s language. <em>Now they’ll speak it back.</em></h1>
+          </div>
+          <img class="mo" src="assets/mo.svg" alt="Mo, the FamilySpeak buddy, waving" width="150" height="155">
+        </div>
         <p class="lead">FamilySpeak is a speaking app for kids 6 to 12 who grew up hearing Spanish or Haitian Creole at home but answer in English. Short daily lessons about real home life get them talking, reading, and chatting with their grandparents.</p>
         <a class="cta" href="#join">Join the test</a>
+      </section>
+
+      <section aria-labelledby="see-title">
+        <h2 id="see-title">See it in the app</h2>
+        <div class="screens">
+          <figure>
+            <img src="assets/screens/lesson.png" alt="A lesson: Manman asks “Ou manje deja?” (Did you eat yet?). Mo stands next to the big pink mic button. Hold the button and talk." width="390" height="844" loading="lazy">
+            <figcaption>Kids answer out loud by holding the mic.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/screens/kid-home.png" alt="The kid home screen: “Bonjou, Sofia!” with Mo, stars, coins, badges and today’s lesson." width="390" height="844" loading="lazy">
+            <figcaption>Mo, stars, coins and today’s lesson.</figcaption>
+          </figure>
+        </div>
       </section>
 
       <section id="courses" aria-labelledby="courses-title">
@@ -43,12 +70,12 @@
           <article class="card habla">
             <span class="tag">Spanish</span>
             <h3>Habla <span class="lang">Spanish for heritage kids</span></h3>
-            <p>80 lessons about food at home, family, school, feelings, games, outings and holidays. Accepts regional words and accents, from Mexican to Caribbean to South American Spanish.</p>
+            <p>80 lessons about food at home, family, school, feelings, games, outings and holidays. Accepts regional words and accents, from Mexican to Central American to Caribbean to South American Spanish.</p>
           </article>
           <article class="card pale">
             <span class="tag">Haitian Creole</span>
             <h3>Pale <span class="lang">Haitian Creole for heritage kids</span></h3>
-            <p>80 lessons built around Haitian family life: diri ak pwa, soup joumou, Kanaval, church, the market, and talking with Grann and Granpè. Native speakers are reviewing every line during the test.</p>
+            <p>80 lessons built around Haitian family life: diri ak pwa, soup joumou, Kanaval, church, the market, and talking with Grann and Granpè. Every line will be reviewed by native Haitian Creole speakers before launch.</p>
           </article>
         </div>
       </section>
@@ -57,7 +84,7 @@
         <h2 id="how-title">How it works</h2>
         <ol class="steps">
           <li><strong>A parent sets it up in about 3 minutes.</strong> Make an account, give permission, add each kid with a nickname, age and family language.</li>
-          <li><strong>Kids do one short lesson a day.</strong> They hear a moment from home, answer out loud by holding the mic button, get gentle feedback, and read a short story. Stars, coins and a buddy to dress up keep it fun.</li>
+          <li><strong>Kids do one short lesson a day.</strong> They hear a moment from home, answer out loud by holding the mic button, get gentle feedback, and read a short story. Stars, coins and Mo, a buddy to name and dress up, keep it fun.</li>
           <li><strong>Grandparents can join in.</strong> Send them a link and they record lines on a web page, no app needed. Kids hear their voices in lessons and can send a voice message back.</li>
           <li><strong>Parents see the progress.</strong> A weekly report shows lessons done, answers spoken in the family language, new words, and a phrase to try at dinner.</li>
         </ol>
@@ -81,9 +108,50 @@
         <div class="join">
           <h2 id="join-title">Join the test</h2>
           <p>We’re looking for families with kids 6 to 12 who speak Spanish or Haitian Creole at home to try FamilySpeak on iPhone through Apple TestFlight. It’s free during the test.</p>
-          <p>Email <a href="mailto:hello@familyspeak.app?subject=Join%20the%20FamilySpeak%20test">hello@familyspeak.app</a> with your kids’ ages and your family language. We’ll send you an invite.</p>
-          <p class="other" lang="es">¿Hablan español en casa? Escríbenos a <a href="mailto:hello@familyspeak.app?subject=Quiero%20probar%20FamilySpeak">hello@familyspeak.app</a> para probar la app.</p>
-          <p class="other" lang="ht">Nou pale kreyòl lakay? Ekri nou nan <a href="mailto:hello@familyspeak.app?subject=Mwen%20vle%20eseye%20FamilySpeak">hello@familyspeak.app</a> pou eseye app la.</p>
+          <form id="join-form" class="form" novalidate>
+            <label for="jn-email">Parent’s email</label>
+            <input id="jn-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" required>
+            <fieldset>
+              <legend>Your kids’ ages <span class="soft">(pick all that apply)</span></legend>
+              <div class="choices">
+                <label><input type="checkbox" name="age" value="4"><span>4</span></label>
+                <label><input type="checkbox" name="age" value="5"><span>5</span></label>
+                <label><input type="checkbox" name="age" value="6"><span>6</span></label>
+                <label><input type="checkbox" name="age" value="7"><span>7</span></label>
+                <label><input type="checkbox" name="age" value="8"><span>8</span></label>
+                <label><input type="checkbox" name="age" value="9"><span>9</span></label>
+                <label><input type="checkbox" name="age" value="10"><span>10</span></label>
+                <label><input type="checkbox" name="age" value="11"><span>11</span></label>
+                <label><input type="checkbox" name="age" value="12"><span>12</span></label>
+                <label><input type="checkbox" name="age" value="13"><span>13</span></label>
+                <label><input type="checkbox" name="age" value="14"><span>14</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Family language</legend>
+              <div class="choices">
+                <label><input type="radio" name="language" value="es"><span>Spanish</span></label>
+                <label><input type="radio" name="language" value="ht"><span>Haitian Creole</span></label>
+                <label><input type="radio" name="language" value="both"><span>Both</span></label>
+                <label><input type="radio" name="language" value="other"><span>Another language</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Do you have an iPhone?</legend>
+              <div class="choices">
+                <label><input type="radio" name="iphone" value="yes"><span>Yes</span></label>
+                <label><input type="radio" name="iphone" value="no"><span>No</span></label>
+              </div>
+            </fieldset>
+            <!-- Left empty by people; bots fill it in -->
+            <div class="hp" aria-hidden="true">
+              <label for="jn-website">Website</label>
+              <input id="jn-website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <button type="submit" class="cta">Sign up for the test</button>
+            <p id="jn-status" class="status" role="status" aria-live="polite"></p>
+          </form>
+          <p class="fine">For parents. We keep your email, your kids’ ages (never names), your family language and whether you have an iPhone, only to run the test and send your invite. <a href="privacy/#signups">Privacy Policy</a></p>
         </div>
       </section>
 
@@ -91,20 +159,20 @@
         <div class="card request">
           <h2 id="request-title">Request your language</h2>
           <p>Does your family speak another language at home? Tell us which one. Every request counts toward the next course we build.</p>
-          <form id="request-form" novalidate>
+          <form id="request-form" class="form" novalidate>
             <label for="rq-language">Your family’s language</label>
             <select id="rq-language" name="language" required>
               <option value="">Choose one…</option>
-              <option>Igbo</option>
-              <option>Yoruba</option>
-              <option>French</option>
-              <option>Portuguese</option>
-              <option>Tagalog</option>
-              <option>Vietnamese</option>
-              <option>Arabic</option>
-              <option>Mandarin</option>
-              <option>Hindi</option>
-              <option>Korean</option>
+              <option value="Igbo">Igbo</option>
+              <option value="Yoruba">Yoruba</option>
+              <option value="French">French</option>
+              <option value="Portuguese">Portuguese</option>
+              <option value="Tagalog">Tagalog</option>
+              <option value="Vietnamese">Vietnamese</option>
+              <option value="Arabic">Arabic</option>
+              <option value="Mandarin">Mandarin</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Korean">Korean</option>
               <option value="other">Something else…</option>
             </select>
             <div id="rq-other-wrap" hidden>
@@ -129,7 +197,7 @@
 
   <footer class="foot">
     <div class="wrap">
-      <span>© 2026 FamilySpeak · <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a></span>
+      <span>© 2026 FamilySpeak · LeadGendary Services LLC · <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a></span>
       <nav aria-label="Legal">
         <a href="privacy/">Privacy Policy</a>
         <a href="terms/">Terms</a>
@@ -137,52 +205,6 @@
       </nav>
     </div>
   </footer>
-  <script>
-    // "Request your language": sent to the FamilySpeak server (no cookies, no tracking)
-    (function () {
-      var ENDPOINT = 'https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/language-request';
-      var form = document.getElementById('request-form');
-      var select = document.getElementById('rq-language');
-      var otherWrap = document.getElementById('rq-other-wrap');
-      var other = document.getElementById('rq-other');
-      var email = document.getElementById('rq-email');
-      var status = document.getElementById('rq-status');
-      var button = form.querySelector('button');
-      var say = function (text, bad) { status.textContent = text; status.className = 'status' + (bad ? ' bad' : ' good'); };
-
-      select.addEventListener('change', function () {
-        otherWrap.hidden = select.value !== 'other';
-        if (!otherWrap.hidden) other.focus();
-      });
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var language = select.value === 'other' ? other.value.trim() : select.value;
-        if (!language) return say('Please choose or type a language.', true);
-        if (email.value && !email.checkValidity()) return say('Please check the email address.', true);
-        button.disabled = true;
-        say('Sending…');
-        fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ source: 'web', language: language, email: email.value.trim() || null, askedIn: 'en', website: form.website.value }),
-        })
-          .then(function (res) { return res.json().then(function (body) { return { status: res.status, body: body }; }); })
-          .then(function (r) {
-            if (r.status === 200) {
-              var notify = !!email.value.trim();
-              form.reset();
-              otherWrap.hidden = true;
-              say('Thank you! We counted your request for ' + language + '.' + (notify ? ' We’ll email you when it’s ready.' : ''));
-            } else if (r.body && r.body.error === 'bad_email') say('Please check the email address.', true);
-            else if (r.body && r.body.error === 'bad_language') say('Please type the language name using letters only.', true);
-            else if (r.status === 429) say('Thanks! We already have your request. Please try again later.', true);
-            else say('Something went wrong. Please try again, or email hello@familyspeak.app.', true);
-          })
-          .catch(function () { say('Couldn’t send that. Check your internet and try again.', true); })
-          .then(function () { button.disabled = false; });
-      });
-    })();
-  </script>
+  <script src="assets/site.js"></script>
 </body>
 </html>
