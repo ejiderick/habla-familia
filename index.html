@@ -20,6 +20,7 @@
       <nav class="nav" aria-label="Site">
         <a href="#courses">Courses</a>
         <a href="#join">Join the test</a>
+        <a href="#request">Request a language</a>
         <a href="support/">Support</a>
       </nav>
     </div>
@@ -84,6 +85,44 @@
           <p class="other" lang="ht">Nou pale kreyòl lakay? Ekri nou nan <a href="mailto:hello@familyspeak.app?subject=Mwen%20vle%20eseye%20FamilySpeak">hello@familyspeak.app</a> pou eseye app la.</p>
         </div>
       </section>
+
+      <section id="request" aria-labelledby="request-title">
+        <div class="card request">
+          <h2 id="request-title">Request your language</h2>
+          <p>Does your family speak another language at home? Tell us which one. Every request counts toward the next course we build.</p>
+          <form id="request-form" novalidate>
+            <label for="rq-language">Your family’s language</label>
+            <select id="rq-language" name="language" required>
+              <option value="">Choose one…</option>
+              <option>Igbo</option>
+              <option>Yoruba</option>
+              <option>French</option>
+              <option>Portuguese</option>
+              <option>Tagalog</option>
+              <option>Vietnamese</option>
+              <option>Arabic</option>
+              <option>Mandarin</option>
+              <option>Hindi</option>
+              <option>Korean</option>
+              <option value="other">Something else…</option>
+            </select>
+            <div id="rq-other-wrap" hidden>
+              <label for="rq-other">Type your language</label>
+              <input id="rq-other" name="other" type="text" maxlength="40" autocomplete="off">
+            </div>
+            <label for="rq-email">Email <span class="soft">(optional, to hear when it’s ready)</span></label>
+            <input id="rq-email" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email">
+            <!-- Left empty by people; bots fill it in -->
+            <div class="hp" aria-hidden="true">
+              <label for="rq-website">Website</label>
+              <input id="rq-website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <button type="submit" class="cta">Send request</button>
+            <p id="rq-status" class="status" role="status" aria-live="polite"></p>
+          </form>
+          <p class="fine">For parents and grown-ups. We keep the language you choose and, if you give it, your email, only to tell you when it’s ready. <a href="privacy/#requests">Privacy Policy</a></p>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -97,5 +136,52 @@
       </nav>
     </div>
   </footer>
+  <script>
+    // "Request your language": sent to the FamilySpeak server (no cookies, no tracking)
+    (function () {
+      var ENDPOINT = 'https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/language-request';
+      var form = document.getElementById('request-form');
+      var select = document.getElementById('rq-language');
+      var otherWrap = document.getElementById('rq-other-wrap');
+      var other = document.getElementById('rq-other');
+      var email = document.getElementById('rq-email');
+      var status = document.getElementById('rq-status');
+      var button = form.querySelector('button');
+      var say = function (text, bad) { status.textContent = text; status.className = 'status' + (bad ? ' bad' : ' good'); };
+
+      select.addEventListener('change', function () {
+        otherWrap.hidden = select.value !== 'other';
+        if (!otherWrap.hidden) other.focus();
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var language = select.value === 'other' ? other.value.trim() : select.value;
+        if (!language) return say('Please choose or type a language.', true);
+        if (email.value && !email.checkValidity()) return say('Please check the email address.', true);
+        button.disabled = true;
+        say('Sending…');
+        fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: 'web', language: language, email: email.value.trim() || null, askedIn: 'en', website: form.website.value }),
+        })
+          .then(function (res) { return res.json().then(function (body) { return { status: res.status, body: body }; }); })
+          .then(function (r) {
+            if (r.status === 200) {
+              var notify = !!email.value.trim();
+              form.reset();
+              otherWrap.hidden = true;
+              say('Thank you! We counted your request for ' + language + '.' + (notify ? ' We’ll email you when it’s ready.' : ''));
+            } else if (r.body && r.body.error === 'bad_email') say('Please check the email address.', true);
+            else if (r.body && r.body.error === 'bad_language') say('Please type the language name using letters only.', true);
+            else if (r.status === 429) say('Thanks! We already have your request. Please try again later.', true);
+            else say('Something went wrong. Please try again, or email hello@familyspeak.app.', true);
+          })
+          .catch(function () { say('Couldn’t send that. Check your internet and try again.', true); })
+          .then(function () { button.disabled = false; });
+      });
+    })();
+  </script>
 </body>
 </html>
