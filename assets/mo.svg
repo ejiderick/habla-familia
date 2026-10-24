@@ -1,23 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 0 112 116" role="img" aria-label="Mo, the FamilySpeak buddy, waving">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -2 108 118" role="img" aria-label="Mo, the FamilySpeak buddy, waving">
   <!-- Mo (BRAND.md "The buddy"): same shapes as src/components/buddy.tsx, waving -->
-  <!-- Sound-wave tufts -->
-  <g fill="none" stroke="#D6336F" stroke-width="4.2" stroke-linecap="round">
-    <path d="M42 29 q-6 -8 0 -16" transform="rotate(-16 42 29)"/>
-    <path d="M50 29 q-6 -10 0 -20"/>
-    <path d="M58 29 q-6 -8 0 -16" transform="rotate(16 58 29)"/>
+  <!-- Three sound waves rising from the head -->
+  <g fill="none" stroke="#D6336F" stroke-width="4.6">
+    <path d="M42.2 23.2 A11 11 0 0 1 57.8 23.2"/>
+    <path d="M35.5 16.5 A20.5 20.5 0 0 1 64.5 16.5"/>
+    <path d="M28.8 9.8 A30 30 0 0 1 71.2 9.8"/>
   </g>
-  <!-- Feet -->
-  <rect x="26" y="100" width="20" height="12" rx="6" fill="#E89A00"/>
-  <rect x="54" y="100" width="20" height="12" rx="6" fill="#E89A00"/>
-  <!-- Arms: left hanging, right waving -->
-  <rect x="-6" y="0" width="12" height="20" rx="6" fill="#FFB21A" stroke="#E89A00" stroke-width="1.2" transform="translate(16 62) rotate(22)"/>
-  <rect x="-6" y="0" width="12" height="20" rx="6" fill="#FFB21A" stroke="#E89A00" stroke-width="1.2" transform="translate(84 62) rotate(-150)"/>
+  <!-- Round feet, body color -->
+  <rect x="22" y="99" width="24" height="13" rx="6.5" fill="#FFB21A" stroke="#E89A00" stroke-width="1"/>
+  <rect x="54" y="99" width="24" height="13" rx="6.5" fill="#FFB21A" stroke="#E89A00" stroke-width="1"/>
+  <!-- Round nub arms: left down, right up waving -->
+  <circle cx="13" cy="71.4" r="8" fill="#FFB21A" stroke="#E89A00" stroke-width="1"/>
+  <circle cx="88" cy="57.1" r="8" fill="#FFB21A" stroke="#E89A00" stroke-width="1"/>
   <!-- Body and belly -->
-  <rect x="12" y="24" width="76" height="84" rx="38" fill="#FFB21A"/>
+  <rect x="15" y="24" width="70" height="84" rx="32" fill="#FFB21A"/>
   <rect x="28" y="72" width="44" height="32" rx="16" fill="#FFD27A"/>
   <!-- Cheeks -->
-  <ellipse cx="25" cy="66.8" rx="5" ry="2.8" fill="#F7A1BD"/>
-  <ellipse cx="75" cy="66.8" rx="5" ry="2.8" fill="#F7A1BD"/>
+  <ellipse cx="26" cy="66.8" rx="5" ry="2.8" fill="#F7A1BD"/>
+  <ellipse cx="74" cy="66.8" rx="5" ry="2.8" fill="#F7A1BD"/>
   <!-- Eyebrows -->
   <rect x="33" y="36.5" width="10" height="2.8" rx="1.4" fill="#24132E"/>
   <rect x="57" y="36.5" width="10" height="2.8" rx="1.4" fill="#24132E"/>
