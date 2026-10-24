@@ -170,3 +170,4 @@ details[open] summary { margin-bottom: 8px; }
 .form .status.bad { color: var(--error); }
 .fine { font-size: 15px; color: var(--dusk); margin: 0; }
 .top .wrap { row-gap: 8px; }
+.screens figcaption .screen-tag { display: block; margin-bottom: 2px; font: 700 13px var(--display); color: var(--lilac-deep); letter-spacing: 0.02em; }
