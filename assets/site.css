@@ -142,9 +142,10 @@ details[open] summary { margin-bottom: 8px; }
 @media (prefers-reduced-motion: reduce) { .mo { animation: none; } }
 
 /* App screenshots */
-.screens { display: flex; gap: 16px; overflow-x: auto; padding: 4px 2px 12px; scroll-snap-type: x mandatory; }
-.screens figure { margin: 0; flex: 0 0 auto; width: min(240px, 70vw); scroll-snap-align: start; }
-.screens img { display: block; width: 100%; border-radius: 28px; border: 6px solid var(--plum); background: var(--white); box-shadow: 0 8px 24px rgba(61, 30, 79, 0.18); }
+/* A grid that wraps: every screenshot is fully visible, never a sideways scroll */
+.screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px 16px; padding: 4px 0 12px; }
+.screens figure { margin: 0; min-width: 0; }
+.screens img { display: block; width: 100%; height: auto; border-radius: 22px; border: 5px solid var(--plum); background: var(--white); box-shadow: 0 8px 24px rgba(61, 30, 79, 0.18); }
 .screens figcaption { margin-top: 8px; font-size: 15px; color: var(--dusk); text-align: center; }
 
 /* Forms: "Join the test" and "Request your language" */
