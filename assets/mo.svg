@@ -1,33 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -2 108 118" role="img" aria-label="Mo, the FamilySpeak buddy, waving">
   <!-- Mo (BRAND.md "The buddy"): same shapes as src/components/buddy.tsx, waving -->
   <!-- Three sound waves rising from the head -->
-  <g fill="none" stroke="#D6336F" stroke-width="4.6">
+  <g fill="none" stroke="#FF4FA0" stroke-width="4.6" stroke-linecap="round">
     <path d="M42.2 23.2 A11 11 0 0 1 57.8 23.2"/>
     <path d="M35.5 16.5 A20.5 20.5 0 0 1 64.5 16.5"/>
     <path d="M28.8 9.8 A30 30 0 0 1 71.2 9.8"/>
   </g>
   <!-- Round feet, body color -->
-  <rect x="22" y="99" width="24" height="13" rx="6.5" fill="#FFB21A" stroke="#E89A00" stroke-width="1"/>
-  <rect x="54" y="99" width="24" height="13" rx="6.5" fill="#FFB21A" stroke="#E89A00" stroke-width="1"/>
+  <rect x="22" y="99" width="24" height="13" rx="6.5" fill="#FFB21A" stroke="#D08A00" stroke-width="2.6"/>
+  <rect x="54" y="99" width="24" height="13" rx="6.5" fill="#FFB21A" stroke="#D08A00" stroke-width="2.6"/>
   <!-- Round nub arms: left down, right up waving -->
-  <circle cx="13" cy="71.4" r="8" fill="#FFB21A" stroke="#E89A00" stroke-width="1"/>
-  <circle cx="88" cy="57.1" r="8" fill="#FFB21A" stroke="#E89A00" stroke-width="1"/>
+  <circle cx="13" cy="71.4" r="8" fill="#FFB21A" stroke="#D08A00" stroke-width="2.6"/>
+  <circle cx="88" cy="57.1" r="8" fill="#FFB21A" stroke="#D08A00" stroke-width="2.6"/>
   <!-- Body and belly -->
-  <rect x="15" y="24" width="70" height="84" rx="32" fill="#FFB21A"/>
-  <rect x="28" y="72" width="44" height="32" rx="16" fill="#FFD27A"/>
+  <rect x="15" y="24" width="70" height="84" rx="32" fill="#FFB21A" stroke="#D08A00" stroke-width="2.6"/>
+  <rect x="28" y="72" width="44" height="32" rx="16" fill="#FFE3A6"/>
   <!-- Cheeks -->
-  <ellipse cx="26" cy="66.8" rx="5" ry="2.8" fill="#F7A1BD"/>
-  <ellipse cx="74" cy="66.8" rx="5" ry="2.8" fill="#F7A1BD"/>
+  <ellipse cx="26" cy="66.8" rx="5" ry="2.8" fill="#FF8FC0"/>
+  <ellipse cx="74" cy="66.8" rx="5" ry="2.8" fill="#FF8FC0"/>
   <!-- Eyebrows -->
-  <rect x="33" y="36.5" width="10" height="2.8" rx="1.4" fill="#24132E"/>
-  <rect x="57" y="36.5" width="10" height="2.8" rx="1.4" fill="#24132E"/>
+  <rect x="33" y="36.5" width="10" height="2.8" rx="1.4" fill="#22245A"/>
+  <rect x="57" y="36.5" width="10" height="2.8" rx="1.4" fill="#22245A"/>
   <!-- Eyes with white highlights -->
-  <ellipse cx="38" cy="53" rx="6.5" ry="9" fill="#24132E"/>
-  <ellipse cx="62" cy="53" rx="6.5" ry="9" fill="#24132E"/>
+  <ellipse cx="38" cy="53" rx="6.5" ry="9" fill="#22245A" stroke="#fff" stroke-width="2"/>
+  <ellipse cx="62" cy="53" rx="6.5" ry="9" fill="#22245A" stroke="#fff" stroke-width="2"/>
   <circle cx="36" cy="49" r="2.5" fill="#fff"/>
   <circle cx="60" cy="49" r="2.5" fill="#fff"/>
   <circle cx="41" cy="57.8" r="1.2" fill="#fff"/>
   <circle cx="65" cy="57.8" r="1.2" fill="#fff"/>
   <!-- Small open smile -->
-  <path d="M43.5 66 h13 a6.5 7 0 0 1 -13 0 z" fill="#24132E"/>
+  <path d="M43.5 66 h13 a6.5 7 0 0 1 -13 0 z" fill="#22245A" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
 </svg>

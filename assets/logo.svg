@@ -2,6 +2,6 @@
   <!-- Big Marigold bubble with a small Hibiscus bubble answering it (same shapes as src/components/logo.tsx) -->
   <rect x="20" y="45" width="20" height="20" rx="4" fill="#FFB21A" transform="rotate(45 30 55)"/>
   <rect x="0" y="0" width="78" height="59" rx="29.5" fill="#FFB21A"/>
-  <rect x="60.05" y="45.05" width="9.9" height="9.9" rx="2" fill="#D6336F" transform="rotate(45 65 50)"/>
-  <rect x="50" y="48" width="48" height="30" rx="15" fill="#D6336F"/>
+  <rect x="60.05" y="45.05" width="9.9" height="9.9" rx="2" fill="#FF4FA0" transform="rotate(45 65 50)"/>
+  <rect x="50" y="48" width="48" height="30" rx="15" fill="#FF4FA0"/>
 </svg>
