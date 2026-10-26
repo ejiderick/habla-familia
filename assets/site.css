@@ -102,6 +102,14 @@ section { padding: 28px 0; }
 .card.habla .tag { background: var(--mango-soft); }
 .card.pale .tag { background: var(--indigo-mist); }
 .card h3 .lang { display: block; font: 400 16px var(--body); color: var(--soft-ink); }
+/* "More languages coming — request yours": opens the language request form */
+.card.more { display: flex; gap: 14px; align-items: center; text-decoration: none; color: var(--ink); border: 2px dashed var(--indigo); background: var(--indigo-mist); box-shadow: none; }
+.card.more:hover { color: var(--ink); background: var(--white); }
+.card.more strong { display: block; font: 600 19px var(--display); }
+.card.more .soft { display: block; font-size: 16px; }
+.more-icon { font-size: 32px; line-height: 1; }
+.hero .now { font: 600 16px var(--display); color: var(--indigo-deep); margin: 0 0 4px; }
+.hero .now a { color: inherit; }
 .steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
 .steps li { position: relative; padding: 16px 16px 16px 64px; background: var(--white); border-radius: var(--radius); box-shadow: var(--card-shadow); }
 .steps li::before { counter-increment: step; content: counter(step); position: absolute; left: 16px; top: 14px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--indigo); color: var(--white); font: 700 18px var(--display); }
