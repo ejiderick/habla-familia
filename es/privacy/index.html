@@ -35,7 +35,7 @@
     <p class="review-note" role="note">Traducción pendiente de revisión por hablantes nativos.</p><p class="review-note" role="note">Si algo no coincide, vale la versión en inglés.</p>
 <p class="draft"><strong>Borrador, lo revisará un abogado antes del lanzamiento público.</strong> Esta política cubre la versión de prueba (TestFlight) de FamilySpeak.</p>
     <h1>Política de privacidad</h1>
-    <p class="updated">Última actualización: 24 de octubre de 2026</p>
+    <p class="updated">Última actualización: 26 de octubre de 2026</p>
 
     <p>FamilySpeak es una app para que niños de 6 a 12 años practiquen hablar. Ayuda a los niños a hablar el idioma de su familia. Cursos hoy: <strong>Habla</strong> (español) y <strong>Pale</strong> (criollo haitiano), y vienen más. Como la usan niños menores de 13 años, cumplimos la ley de privacidad infantil de EE. UU. (COPPA). Esta página explica, con palabras sencillas, qué guardamos, para qué, quién nos ayuda a hacer funcionar la app y cómo borrarlo.</p>
 
@@ -45,6 +45,7 @@
       <li>De cada niño guardamos solo <strong>un apodo, la edad, niño/niña, el idioma de la familia y su progreso</strong>. Nunca apellidos, fotos, ubicación ni datos de contacto.</li>
       <li>La voz de tu hijo se envía a nuestro servidor para revisar cada respuesta y luego <strong>se borra enseguida</strong>, a menos que actives “Guardar grabaciones”.</li>
       <li>Para revisar las respuestas, la grabación y la pregunta se envían a <strong>OpenAI</strong>.</li>
+      <li>En las <strong>charlas de voz en vivo</strong> con Mo y con el abuelo o la abuela, la voz de tu hijo se envía a <strong>OpenAI</strong> mientras la charla está abierta. No grabamos ni guardamos el audio ni las palabras. Solo guardamos los minutos y algunas cosas favoritas que Mo recuerda (como su comida favorita o el nombre de su mascota), que puedes ver y borrar.</li>
       <li><strong>Sin anuncios. No vendemos ni compartimos datos para publicidad.</strong> Sin herramientas de rastreo y sin conversaciones con desconocidos.</li>
       <li>Puedes borrar los datos de un niño o toda tu cuenta cuando quieras desde la app.</li>
     </ul>
@@ -79,6 +80,24 @@
       <li>El micrófono solo se usa mientras tu hijo mantiene presionado el botón del micrófono.</li>
       <li>Cada grabación va a nuestro servidor, se convierte en texto y se revisa, y luego <strong>se borra justo después de revisarla</strong>.</li>
       <li>Si activas <strong>Guardar grabaciones</strong> en el área de papás, las grabaciones se guardan en un espacio privado para que las escuches después. Puedes desactivarlo cuando quieras; para borrarlas, borra los datos del niño.</li>
+    </ul>
+
+    <h3 id="live-chats">Charlas de voz en vivo (Habla con Mo, Habla con Abuela)</h3>
+    <ul>
+      <li>Tu hijo puede hablar con Mo hasta 5 minutos al día, sobre un tema nuevo de la vida diaria cada día, y con el personaje del abuelo o la abuela 3 minutos al final de cada unidad (hasta dos charlas al día). Puedes apagar las charlas en vivo en el área de papás, en Ajustes → <em>Charlas de voz en vivo</em>.</li>
+      <li>Durante una charla el micrófono sigue encendido hasta que la charla termina: cuando se acaba el tiempo, cuando tu hijo toca <em>Colgar</em>, o cuando sale de la pantalla o la app pasa a segundo plano.</li>
+      <li>El teléfono se conecta directo con OpenAI por una conexión cifrada, con una clave de nuestro servidor que vence a los dos minutos. Nuestra propia clave de OpenAI nunca sale de nuestro servidor.</li>
+      <li>OpenAI escucha la voz de tu hijo en vivo, la convierte en texto y contesta con una voz. Para preparar cada charla le enviamos a OpenAI el apodo, la edad, niño/niña, el idioma de la familia (y el estilo de español), frases de las lecciones que terminó y, para Mo, el tema del día y las cosas favoritas que Mo recuerda. También enviamos un código anónimo hecho a partir de tu cuenta, nunca tu correo, para que OpenAI pueda detectar abusos.</li>
+      <li><strong>No grabamos ni guardamos el audio ni las palabras de una charla en vivo.</strong> Las palabras en la pantalla solo se muestran durante la charla. Guardamos el día, el niño, qué charla fue y los minutos usados, para cumplir el límite diario y mostrarte los minutos.</li>
+      <li>Mo y el abuelo o la abuela están hechos para hablar solo de temas para niños, nunca pedir ni repetir un apellido, una dirección, una escuela, un teléfono, un correo ni fotos, y decirle a un niño que parece triste o en peligro que hable con un adulto de confianza.</li>
+    </ul>
+
+    <h3 id="mo-remembers">Lo que Mo recuerda</h3>
+    <ul>
+      <li>Para que las charlas sean más amistosas, Mo puede recordar algunas cositas que tu hijo le cuenta: su comida, color, animal, juego, deporte, fiesta o materia favorita, qué mascota tiene y el nombre de su mascota. Nada más.</li>
+      <li>Cada una tiene pocas palabras (30 caracteres como máximo), una de cada tipo. Nuestro servidor rechaza lo que tenga números, enlaces o correos, o palabras de calles, escuelas o títulos de adultos. No siempre puede distinguir el nombre de una mascota del de una persona, así que revisa la lista de vez en cuando.</li>
+      <li>Puedes verlas en el área de papás: toca al niño → <em>Lo que Mo recuerda</em>. Toca <em>Olvidar</em> para borrar una. También se borran con los datos del niño.</li>
+      <li>Mo las usa solo para mencionar una en otra charla (por ejemplo, “¿Cómo está Canela hoy?”). Solo van a OpenAI al preparar una charla con Mo.</li>
     </ul>
 
     <h3>Grabaciones de voz de la familia (opcional)</h3>
@@ -118,7 +137,7 @@
         <thead><tr><th>Proveedor</th><th>Qué hace</th><th>Qué recibe</th></tr></thead>
         <tbody>
           <tr><td><strong>Supabase</strong><br><span class="soft">EE. UU. (Oregón)</span></td><td>Nuestra base de datos, inicio de sesión, almacenamiento privado de archivos y código del servidor</td><td>Todo lo descrito arriba. Los archivos están en un espacio privado; cada familia solo puede llegar a sus propios datos.</td></tr>
-          <tr><td><strong>OpenAI</strong><br><span class="soft">EE. UU.</span></td><td>Voz a texto, revisión de respuestas, el abuelo de IA y la voz de IA de las lecciones de criollo haitiano</td><td>La grabación del niño y la pregunta. Para el abuelo de IA, también el apodo, la edad, niño/niña y el idioma de la familia. Para la voz de IA, la frase de la lección que se lee en voz alta (que puede incluir el apodo del niño). Le pedimos a OpenAI que no guarde estas solicitudes cuando su API lo permite. Según las políticas de la API de OpenAI, estos datos no se usan para entrenar sus modelos y se pueden guardar hasta 30 días para vigilar abusos.</td></tr>
+          <tr><td><strong>OpenAI</strong><br><span class="soft">EE. UU.</span></td><td>Voz a texto, revisión de respuestas, el abuelo de IA, las charlas de voz en vivo con Mo y con el abuelo o la abuela, y la voz de IA de las lecciones de criollo haitiano</td><td>La grabación del niño y la pregunta. Para el abuelo de IA, también el apodo, la edad, niño/niña y el idioma de la familia. Para la voz de IA, la frase de la lección que se lee en voz alta (que puede incluir el apodo del niño). Para las charlas de voz en vivo, la voz del niño mientras la charla está abierta y lo que se envía para preparar la charla (ver “Charlas de voz en vivo” arriba). Le pedimos a OpenAI que no guarde estas solicitudes cuando su API lo permite. Según las políticas de la API de OpenAI, estos datos no se usan para entrenar sus modelos y se pueden guardar hasta 30 días para vigilar abusos.</td></tr>
           <tr><td><strong>Resend</strong></td><td>Envía nuestros correos: el informe semanal (si lo dejas activado) y la invitación a la prueba</td><td>Tu correo y el mensaje: en el informe, los apodos de los niños, números de lecciones, palabras nuevas y una frase para la cena; en la invitación, el enlace de TestFlight.</td></tr>
           <tr><td><strong>GitHub Pages</strong></td><td>Aloja esta página web y la página de voces de la familia</td><td>La información normal de una visita web, como la dirección IP, igual que cualquier página.</td></tr>
           <tr><td><strong>ImprovMX</strong></td><td>Reenvía los correos enviados a hello@familyspeak.app</td><td>Los mensajes que nos mandas.</td></tr>
@@ -142,7 +161,7 @@
 
     <h2>6. Cómo borrar datos</h2>
     <ul>
-      <li><strong>Un niño:</strong> Área de papás → toca al niño → <em>Borrar los datos de [nombre]</em>. Esto borra el perfil, el progreso, las respuestas y transcripciones, las grabaciones guardadas, las grabaciones y mensajes de la familia, y las frases con voz de IA que dicen su nombre.</li>
+      <li><strong>Un niño:</strong> Área de papás → toca al niño → <em>Borrar los datos de [nombre]</em>. Esto borra el perfil, el progreso, las respuestas y transcripciones, las grabaciones guardadas, las grabaciones y mensajes de la familia, las frases con voz de IA que dicen su nombre, los minutos de charla en vivo y lo que Mo recuerda.</li>
       <li><strong>Toda la cuenta:</strong> Área de papás → Cuenta → <em>Borrar mi cuenta</em>. Esto borra todo lo anterior de cada niño, además de tu inicio de sesión, tu configuración, el registro del permiso y tus pedidos de idioma.</li>
       <li><strong>Una inscripción a la prueba o un pedido de idioma desde la página web:</strong> escríbenos desde el correo que nos diste y lo borramos.</li>
       <li>O escribe a <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a> desde el correo de tu cuenta y lo hacemos por ti.</li>
