@@ -23,10 +23,15 @@
         <a href="../terms/">Terms</a>
         <a href="../support/">Support</a>
       </nav>
-      <nav class="langs" aria-label="Language">
-        <a href="./" lang="en" aria-current="true">English</a>
-        <a href="../es/privacy/" lang="es" hreflang="es">Español</a>
-        <a href="../ht/privacy/" lang="ht" hreflang="ht">Kreyòl</a>
+      <nav class="lang-switch" aria-label="Language">
+      <details class="langs">
+        <summary aria-label="Language: English"><svg class="globe" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="8.2"/><ellipse cx="10" cy="10" rx="3.6" ry="8.2"/><path d="M1.8 10h16.4"/></svg><span>English</span><span class="caret" aria-hidden="true">▾</span></summary>
+        <ul>
+          <li><a href="./" lang="en" aria-current="true">English<span class="tick" aria-hidden="true">✓</span></a></li>
+          <li><a href="../es/privacy/" lang="es" hreflang="es">Español</a></li>
+          <li><a href="../ht/privacy/" lang="ht" hreflang="ht">Kreyòl</a></li>
+        </ul>
+      </details>
       </nav>
     </div>
   </header>
@@ -195,5 +200,14 @@
       </nav>
     </div>
   </footer>
+  <script>
+    // Close the language list on a tap outside it or on Escape
+    (function () {
+      var d = document.querySelector('details.langs');
+      if (!d) return;
+      document.addEventListener('click', function (e) { if (d.open && !d.contains(e.target)) d.open = false; });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && d.open) { d.open = false; d.querySelector('summary').focus(); } });
+    })();
+  </script>
 </body>
 </html>

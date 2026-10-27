@@ -151,10 +151,27 @@ details[open] summary { margin-bottom: 8px; }
 .request .fine { font-size: 15px; color: var(--soft-ink); margin: 0; }
 .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 
-/* Language switch (English / Español / Kreyòl) */
-.langs { display: flex; gap: 4px; padding: 3px; border-radius: 999px; background: rgba(255, 255, 255, 0.7); font-size: 15px; }
-.langs a { padding: 4px 10px; border-radius: 999px; color: var(--ink); text-decoration: none; }
-.langs a[aria-current] { background: var(--white); font-weight: 700; box-shadow: 0 1px 2px rgba(34, 36, 90, 0.15); }
+/* Language pill (English / Español / Kreyòl): a globe and the current language; opens a short list */
+.lang-switch { position: relative; }
+/* (resets the FAQ card look that plain <details> get) */
+.langs { position: relative; background: none; border-radius: 0; padding: 0; margin: 0; box-shadow: none; }
+.langs[open] summary { margin-bottom: 0; }
+.langs summary { list-style: none; display: flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px 0 12px; border-radius: 999px; background: var(--white); color: var(--ink); font: 600 16px var(--display); cursor: pointer; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.6), inset 0 -3px 0 rgba(34, 36, 90, 0.08), 0 6px 16px rgba(34, 36, 90, 0.12); user-select: none; }
+.langs summary::-webkit-details-marker { display: none; }
+.langs summary:active { transform: translateY(1px) scale(0.98); }
+.langs summary:focus-visible { outline: 3px solid var(--mango); outline-offset: 2px; }
+.langs .globe { fill: none; stroke: var(--ink); stroke-width: 1.6; }
+.langs .caret { font-size: 12px; color: var(--soft-ink); transition: transform .2s; }
+.langs[open] .caret { transform: rotate(180deg); }
+.langs ul { position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; min-width: 180px; margin: 0; padding: 6px; list-style: none; border-radius: 20px; background: var(--white); box-shadow: 0 14px 34px rgba(34, 36, 90, 0.2); animation: langs-in .18s ease-out; }
+.langs li a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 14px; color: var(--ink); font: 600 18px var(--display); text-decoration: none; }
+.langs li a:hover, .langs li a:focus-visible { background: var(--mango-soft); outline: none; }
+.langs li a[aria-current] { background: var(--mango-soft); }
+.langs .tick { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--mango); color: var(--ink); font-size: 14px; }
+/* On phones the pill sits on the left, so the list opens to the right */
+@media (max-width: 640px) { .langs ul { right: auto; left: 0; } }
+@keyframes langs-in { from { opacity: 0; transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { .langs ul { animation: none; } .langs .caret { transition: none; } }
 .review-note { margin: 0 0 12px; padding: 8px 12px; border-radius: 12px; background: var(--mango-soft); color: var(--ink-night); font-size: 15px; }
 
 /* Hero with Mo */
