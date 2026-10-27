@@ -75,6 +75,9 @@
     .thanks { background: var(--marigold-soft); border: 2px solid var(--marigold); border-radius: 20px; padding: 18px; margin-top: 16px; text-align: center; }
     .thanks .big { font-size: 48px; }
     .finish { margin-top: 24px; text-align: center; }
+    .reply.focus { border: 3px solid var(--marigold); box-shadow: 0 0 0 4px rgba(255, 178, 26, 0.25); }
+    .sendBack { background: var(--white); border: 2px solid var(--lilac); border-bottom-width: 4px; border-radius: 20px; padding: 16px; margin-top: 12px; }
+    .sent { font-size: 16px; margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -88,6 +91,8 @@
 // Words: Spanish below; other courses send their own (content/course-<code>.json "page").
 const FUNCTION_URL = 'https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/family';
 const MAX_SECONDS = 15;
+// A voice reply to the kid: up to 1 minute
+const MAX_REPLY_SECONDS = 60;
 
 const SPANISH = {
   locale: 'es',
@@ -131,6 +136,14 @@ const SPANISH = {
   thanksSome: 'Puedes grabar las demás cuando quieras. Ya puedes cerrar esta página.',
   saveLink: 'Guarda el mensaje con este enlace: cuando vuelvas habrá frases nuevas, y aquí vas a escuchar los mensajes de voz de {kid}.',
   done: '👋 Terminé por hoy',
+  replyTitle: '💌 Mándale un mensaje de voz a {kid}',
+  replyIntro: 'Hasta 1 minuto. {kid} lo va a escuchar en la app.',
+  replyRecord: '🎙️ Grabar mi mensaje',
+  replySend: '📤 Mandar a {kid}',
+  replySent: '✓ ¡Listo! {kid} lo va a escuchar en la app.',
+  replyLimit: 'Ya mandaste 3 mensajes esta semana. ¡Podrás mandar otro pronto!',
+  yourMessages: 'Tus mensajes a {kid}',
+  kidHeard: '💛 {kid} lo escuchó',
   speakers: {
     Abuela: '👵 La dice Abuela', Abuelo: '👴 La dice Abuelo', 'Mamá': '👩 La dice Mamá',
     'Papá': '👨 La dice Papá', 'Tía': '👩 La dice la tía', 'Tío': '👨 La dice el tío',
@@ -149,7 +162,8 @@ const BEFORE_LOAD_HT = {
 
 let S = SPANISH;
 const app = document.getElementById('app');
-const token = new URLSearchParams(location.hash.slice(1)).get('t') || '';
+const hashParams = () => new URLSearchParams(location.hash.slice(1));
+let token = hashParams().get('t') || '';
 let data = null;
 
 /** A page word with {placeholders} filled in. Words may contain <b>, so values are escaped. */
@@ -194,6 +208,7 @@ function showMessage(emoji, titleKey, bodyKey, bothLanguages = false) {
 }
 
 async function load() {
+  token = hashParams().get('t') || '';
   if (!token) return showMessage('🔗', 'missingLinkTitle', 'missingLinkBody', true);
   try {
     data = await call({ action: 'open' });
@@ -216,6 +231,7 @@ function render() {
     <p>${say('intro', { kid })}</p>
     <div class="tip">${say('tip', { kid })}</div>
     ${data.replies.length ? `<h2>${say('messagesFrom', { kid })}</h2>${data.replies.map(replyCard).join('')}` : ''}
+    <div class="sendBack" id="sendBack"></div>
     <h2>${say('toRecord')} ${todo ? `<span class="soft">(${todo})</span>` : ''}</h2>
     ${data.phrases.length ? '<div class="progress" id="progress"></div>' : ''}
     ${data.phrases.length ? data.phrases.map(phraseCard).join('') : `<p class="soft">${say('noPhrases')}</p>`}
@@ -229,6 +245,102 @@ function render() {
   app.querySelectorAll('audio[data-reply]').forEach((el) => {
     el.addEventListener('play', () => call({ action: 'heard', replyId: el.dataset.reply }).catch(() => {}), { once: true });
   });
+  wireSendBack();
+  // Opened from the "listen" link: bring that message into view
+  const focus = hashParams().get('m');
+  const card = focus && document.getElementById('r' + focus);
+  if (card) {
+    card.classList.add('focus');
+    card.scrollIntoView({ block: 'center' });
+  }
+}
+
+// A voice reply to the kid: record (up to 1 minute) → listen → send
+function wireSendBack() {
+  const box = document.getElementById('sendBack');
+  const kid = data.kid.nickname;
+  const sentList = () =>
+    data.sent && data.sent.length
+      ? `<p class="soft sent"><b>${say('yourMessages', { kid })}</b><br>${data.sent
+          .map((m) => `${esc(dayName(m.createdAt))}${m.played ? ` · ${say('kidHeard', { kid })}` : ''}`)
+          .join('<br>')}</p>`
+      : '';
+  let recorder = null, chunks = [], blob = null, timer = null;
+  const idle = (note = '') => {
+    box.innerHTML = `<h2 style="margin-top:0">${say('replyTitle', { kid })}</h2><p class="soft">${say('replyIntro', { kid })}</p>
+      ${data.canSend === false ? `<p>${say('replyLimit')}</p>` : `<div class="row"><button class="mic" data-act="record">${say('replyRecord')}</button></div>`}
+      <div class="error" data-error>${note}</div>${sentList()}`;
+  };
+  const error = () => box.querySelector('[data-error]');
+  const start = async () => {
+    if (!micReady()) {
+      if (!(await openMic())) {
+        error().innerHTML = say('micNeeded');
+        return;
+      }
+      error().innerHTML = `<span style="color:var(--lilac-deep)">${say('micReady')}</span>`;
+      return;
+    }
+    const type = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm'].find((t) => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
+    recorder = new MediaRecorder(micStream, type ? { mimeType: type } : undefined);
+    chunks = [];
+    recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+    recorder.onstop = () => {
+      clearInterval(timer);
+      blob = new Blob(chunks, { type: recorder.mimeType || type || 'audio/mp4' });
+      const url = URL.createObjectURL(blob);
+      box.querySelector('.row').innerHTML = `<audio controls src="${url}"></audio>
+        <button data-act="send">${say('replySend', { kid })}</button><button class="plain" data-act="record">${say('again')}</button>`;
+    };
+    recorder.start();
+    let left = MAX_REPLY_SECONDS;
+    box.querySelector('.row').innerHTML = `<button class="recording" data-act="stop">${say('stop')}</button><span class="timer">🔴 ${left}</span>`;
+    timer = setInterval(() => {
+      left -= 1;
+      const t = box.querySelector('.timer');
+      if (t) t.textContent = '🔴 ' + left;
+      if (left <= 0) recorder.state === 'recording' && recorder.stop();
+    }, 1000);
+  };
+  const send = async (btn) => {
+    btn.disabled = true;
+    btn.textContent = S.saving;
+    const form = new FormData();
+    form.append('action', 'message');
+    form.append('token', token);
+    form.append('audio', blob, 'mensaje.' + (blob.type.includes('webm') ? 'webm' : 'm4a'));
+    try {
+      const res = await fetch(FUNCTION_URL, { method: 'POST', body: form });
+      if (res.status === 404) return showMessage('🔒', 'deadLinkTitle', 'deadLinkBody');
+      if (res.status === 429) {
+        data.canSend = false;
+        return idle();
+      }
+      if (!res.ok) throw new Error();
+      data.sent = [{ id: '', createdAt: new Date().toISOString(), played: false }, ...(data.sent || [])];
+      idle(`<span style="color:var(--lilac-deep)">${say('replySent', { kid })}</span>`);
+    } catch {
+      btn.disabled = false;
+      btn.innerHTML = say('replySend', { kid });
+      error().innerHTML = say('saveFailed');
+    }
+  };
+  box.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    if (btn.dataset.act === 'record') start();
+    else if (btn.dataset.act === 'stop') recorder && recorder.state === 'recording' && recorder.stop();
+    else if (btn.dataset.act === 'send') send(btn);
+  });
+  idle();
+}
+
+function dayName(iso) {
+  try {
+    return new Date(iso).toLocaleDateString(S.locale || 'es', { weekday: 'long', day: 'numeric', month: 'long' });
+  } catch {
+    return new Date(iso).toLocaleDateString();
+  }
 }
 
 // After each save: show progress, point to the next line, or say thank you
@@ -268,13 +380,8 @@ function showThanks(scroll) {
 }
 
 function replyCard(r) {
-  let when;
-  try {
-    when = new Date(r.createdAt).toLocaleDateString(S.locale || 'es', { weekday: 'long', day: 'numeric', month: 'long' });
-  } catch {
-    when = new Date(r.createdAt).toLocaleDateString();
-  }
-  return `<div class="reply">${r.heard ? '' : `<span class="badge">${say('newBadge')}</span> `}<span class="soft">${esc(when)}</span>
+  const when = dayName(r.createdAt);
+  return `<div class="reply" id="r${esc(r.id)}">${r.heard ? '' : `<span class="badge">${say('newBadge')}</span> `}<span class="soft">${esc(when)}</span>
     ${r.url ? `<audio controls preload="none" src="${esc(r.url)}" data-reply="${esc(r.id)}"></audio>` : ''}</div>`;
 }
 
