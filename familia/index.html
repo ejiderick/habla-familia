@@ -75,6 +75,20 @@
     .thanks { background: var(--marigold-soft); border: 2px solid var(--marigold); border-radius: 20px; padding: 18px; margin-top: 16px; text-align: center; }
     .thanks .big { font-size: 48px; }
     .finish { margin-top: 24px; text-align: center; }
+    .lead { font-size: 20px; margin: 6px 0 0; }
+    .target { background: var(--white); border: 2px solid var(--line); border-radius: 20px; padding: 14px 16px; margin-top: 16px; }
+    .target .bar { margin-top: 10px; }
+    .count { font-size: 15px; color: var(--dusk); margin-top: 6px; }
+    .lineCard { padding: 22px 18px; border-radius: 24px; box-shadow: 0 10px 24px rgba(61, 30, 79, 0.08); }
+    .lineCard .line { font-size: 30px; margin: 6px 0 4px; }
+    .meaning { font-size: 17px; color: var(--dusk); font-style: italic; margin-bottom: 16px; }
+    .lineCard .row button { flex: 1 1 auto; min-height: 56px; font-size: 21px; }
+    .lineCard .row button.mic, .lineCard .row button.recording { width: 100%; min-height: 64px; font-size: 23px; }
+    .lineCard .row audio { width: 100%; }
+    .nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
+    .nav button { min-height: 44px; font-size: 17px; }
+    details.help { margin-top: 16px; background: var(--marigold-soft); border-radius: 16px; padding: 10px 14px; }
+    details.help summary { cursor: pointer; font-weight: 700; }
     .reply.focus { border: 3px solid var(--marigold); box-shadow: 0 0 0 4px rgba(255, 178, 26, 0.25); }
     .sendBack { background: var(--white); border: 2px solid var(--lilac); border-bottom-width: 4px; border-radius: 20px; padding: 16px; margin-top: 12px; }
     .sent { font-size: 16px; margin-top: 6px; }
@@ -136,6 +150,18 @@ const SPANISH = {
   thanksSome: 'Puedes grabar las demás cuando quieras. Ya puedes cerrar esta página.',
   saveLink: 'Guarda el mensaje con este enlace: cuando vuelvas habrá frases nuevas, y aquí vas a escuchar los mensajes de voz de {kid}.',
   done: '👋 Terminé por hoy',
+  wouldLove: '{kid} quiere escucharte decir estas frases.',
+  forKid: 'Frases para {kid}',
+  lessonLabel: 'Lección {n}',
+  unitLabel: 'Unidad {n}',
+  packLabel: 'Especial de fiestas',
+  linesCount: '{n} frases',
+  recordedCount: '{done} de {total} grabadas',
+  lineOf: 'Frase {n} de {total}',
+  nextLine: 'Siguiente →',
+  finishLine: 'Terminar',
+  back: '← Atrás',
+  micHelpTitle: '¿Problemas con el micrófono?',
   replyTitle: '💌 Mándale un mensaje de voz a {kid}',
   replyIntro: 'Hasta 1 minuto. {kid} lo va a escuchar en la app.',
   replyRecord: '🎙️ Grabar mi mensaje',
@@ -222,26 +248,34 @@ async function load() {
   }
 }
 
+// The line on screen (one at a time)
+let current = 0;
+
 function render() {
   const kid = data.kid.nickname;
-  const todo = data.phrases.filter((p) => !p.recorded).length;
+  const total = data.phrases.length;
+  // Opened at a line (the parent's "Replace"), else the first one not recorded yet
+  const asked = hashParams().get('line');
+  const startAt = asked ? data.phrases.findIndex((p) => p.stepId === asked) : data.phrases.findIndex((p) => !p.recorded);
+  current = startAt >= 0 ? startAt : 0;
   app.innerHTML = `
     <div class="brand"><img src="../assets/logo.svg" alt="" width="40" height="36">FamilySpeak</div>
     <h1>${say('hello', { name: data.link.name })}</h1>
-    <p>${say('intro', { kid })}</p>
-    <div class="tip">${say('tip', { kid })}</div>
+    <p class="lead">${say('wouldLove', { kid })}</p>
+    ${total
+      ? `<div class="target"><b>${targetName()}</b> · <span class="soft">${say('linesCount', { n: total })}</span>
+          <div class="bar"><div id="bar"></div></div><div class="count" id="count"></div></div>`
+      : `<p class="soft">${say('noPhrases')}</p>`}
+    <div id="line"></div>
+    <div id="thanks"></div>
+    <details class="help"><summary>${say('micHelpTitle')}</summary><p>${say('tip', { kid })}</p></details>
     ${data.replies.length ? `<h2>${say('messagesFrom', { kid })}</h2>${data.replies.map(replyCard).join('')}` : ''}
     <div class="sendBack" id="sendBack"></div>
-    <h2>${say('toRecord')} ${todo ? `<span class="soft">(${todo})</span>` : ''}</h2>
-    ${data.phrases.length ? '<div class="progress" id="progress"></div>' : ''}
-    ${data.phrases.length ? data.phrases.map(phraseCard).join('') : `<p class="soft">${say('noPhrases')}</p>`}
-    <div id="thanks"></div>
-    ${data.phrases.length ? `<div class="finish"><button class="plain" id="finish">${say('done')}</button></div>` : ''}
     <p class="soft" style="font-size:14px;margin-top:32px">${say('privacy', { kid })} <a href="../privacy/" target="_blank" rel="noopener">${say('privacyLink')}</a></p>`;
-  data.phrases.forEach((p, i) => wirePhrase(p, i));
-  const finish = document.getElementById('finish');
-  if (finish) finish.addEventListener('click', () => showThanks(true));
-  updateProgress(false);
+  if (total) {
+    updateCount();
+    showLine();
+  }
   app.querySelectorAll('audio[data-reply]').forEach((el) => {
     el.addEventListener('play', () => call({ action: 'heard', replyId: el.dataset.reply }).catch(() => {}), { once: true });
   });
@@ -343,26 +377,61 @@ function dayName(iso) {
   }
 }
 
-// After each save: show progress, point to the next line, or say thank you
-function updateProgress(scroll) {
-  const box = document.getElementById('progress');
-  if (!box) return;
+/** "Lesson 1: ¿Ya comiste?" (or the pack, or the older kind of link). */
+function targetName() {
+  const t = data.target;
+  if (!t) return esc(say('forKid', { kid: data.kid.nickname }));
+  const label = t.kind === 'lesson' ? say('lessonLabel', { n: t.number }) : t.kind === 'pack' ? say('packLabel') : say('unitLabel', { n: t.number });
+  return `${label}: ${esc(t.title)}`;
+}
+
+/** The progress bar: "8 of 12 recorded". */
+function updateCount() {
   const total = data.phrases.length;
   const done = data.phrases.filter((p) => p.recorded).length;
-  box.innerHTML = `<b>${say('progress', { done, total })}</b> ${done === total ? '🎉' : ''}<div class="bar"><div style="width:${Math.round((done / total) * 100)}%"></div></div>`;
-  document.querySelectorAll('.card.next').forEach((c) => {
-    c.classList.remove('next');
-    c.querySelector('.nextTag')?.remove();
+  const bar = document.getElementById('bar');
+  if (bar) bar.style.width = Math.round((done / total) * 100) + '%';
+  const count = document.getElementById('count');
+  if (count) count.innerHTML = say('recordedCount', { done, total }) + (done === total ? ' 🎉' : '');
+}
+
+/** One line: the phrase, its meaning, a big Record button, listen, again, and Next. */
+function showLine() {
+  const total = data.phrases.length;
+  const p = data.phrases[current];
+  document.getElementById('thanks').innerHTML = '';
+  const box = document.getElementById('line');
+  box.innerHTML = `<div class="card lineCard ${p.recorded ? 'done' : ''}" id="p${current}">
+      <div class="who">${say('lineOf', { n: current + 1, total })}${p.recorded ? ` · <b style="color:var(--lilac-deep)">${say('recorded')}</b>` : ''}</div>
+      <div class="line">${esc(p.text)}</div>
+      ${p.en ? `<div class="meaning">${esc(p.en)}</div>` : ''}
+      <div class="row" data-controls></div>
+      <div class="error" data-error></div>
+      <div class="nav">
+        <button class="plain" data-nav="back" ${current === 0 ? 'disabled' : ''}>${say('back')}</button>
+        <button class="plain" data-nav="next">${say(current + 1 < total ? 'nextLine' : 'finishLine')}</button>
+      </div>
+    </div>`;
+  wirePhrase(p, current);
+  box.querySelector('[data-nav="back"]').addEventListener('click', () => {
+    if (current > 0) {
+      current -= 1;
+      showLine();
+    }
   });
-  const next = data.phrases.findIndex((p) => !p.recorded);
-  if (next === -1) {
-    showThanks(scroll);
-    return;
+  box.querySelector('[data-nav="next"]').addEventListener('click', () => goNext());
+}
+
+/** The next line, or the thank-you after the last one. */
+function goNext() {
+  if (current + 1 < data.phrases.length) {
+    current += 1;
+    showLine();
+    document.getElementById('line').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    document.getElementById('line').innerHTML = '';
+    showThanks(true);
   }
-  const card = document.getElementById('p' + next);
-  card.classList.add('next');
-  card.insertAdjacentHTML('afterbegin', `<div class="nextTag">${say('nextTag')}</div>`);
-  if (scroll) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function showThanks(scroll) {
@@ -383,19 +452,6 @@ function replyCard(r) {
   const when = dayName(r.createdAt);
   return `<div class="reply" id="r${esc(r.id)}">${r.heard ? '' : `<span class="badge">${say('newBadge')}</span> `}<span class="soft">${esc(when)}</span>
     ${r.url ? `<audio controls preload="none" src="${esc(r.url)}" data-reply="${esc(r.id)}"></audio>` : ''}</div>`;
-}
-
-function phraseCard(p, i) {
-  return `<div class="card ${p.recorded ? 'done' : ''}" id="p${i}">
-    <div class="who">${esc(speakerLabel(p.speaker))} ${p.recorded ? `· <b style="color:var(--lilac-deep)">${say('recorded')}</b>` : ''}</div>
-    <div class="line">${esc(p.text)}</div>
-    <div class="row" data-controls></div>
-    <div class="error" data-error></div>
-  </div>`;
-}
-
-function speakerLabel(s) {
-  return (S.speakers && S.speakers[s]) || '';
 }
 
 // Each phrase: idle → recording → review (listen, save, redo) → saved
@@ -463,11 +519,13 @@ function wirePhrase(p, i) {
       if (!res.ok) throw new Error();
       p.recorded = true;
       card.classList.add('done');
-      card.querySelector('.who').innerHTML = `${esc(speakerLabel(p.speaker))} · <b style="color:var(--lilac-deep)">${say('saved')}</b>`;
       idle();
-      const more = data.phrases.some((x) => !x.recorded);
-      error.innerHTML = more ? `<span style="color:var(--lilac-deep)">${say('keepGoing')}</span>` : '';
-      setTimeout(() => updateProgress(true), more ? 900 : 300);
+      error.innerHTML = `<span style="color:var(--lilac-deep)">${say('saved')}</span>`;
+      updateCount();
+      // On to the next line by itself
+      setTimeout(() => {
+        if (data.phrases[current] === p) goNext();
+      }, 900);
     } catch {
       btn.disabled = false;
       btn.innerHTML = say('save');
@@ -481,10 +539,8 @@ function wirePhrase(p, i) {
       await call({ action: 'unrecord', stepId: p.stepId });
       p.recorded = false;
       card.classList.remove('done');
-      card.querySelector('.who').textContent = speakerLabel(p.speaker);
       idle();
-      document.getElementById('thanks').innerHTML = '';
-      updateProgress(false);
+      updateCount();
     } catch {
       btn.disabled = false;
       error.innerHTML = say('deleteFailed');
