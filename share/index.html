@@ -1,0 +1,78 @@
+<!doctype html>
+<!-- Shared moments: a kid's voice message or certificate a parent chose to share (supabase/functions/share). Hand-written; not built by build-site.mjs. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>A FamilySpeak moment</title>
+  <meta name="description" content="A moment from FamilySpeak, the app that helps kids 6 to 12 speak their family’s language out loud.">
+  <meta name="apple-itunes-app" content="app-id=6826376592">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="logo" href="../"><img src="../assets/logo.svg" alt="FamilySpeak logo: two speech bubbles" width="44" height="40"><b>FamilySpeak</b></a>
+    </div>
+  </header>
+
+  <main class="wrap narrow">
+    <section class="hero">
+      <img class="hero-mo" src="../assets/mo/mo-happy.webp" alt="Mo, the FamilySpeak buddy, cheering" width="200" height="175" fetchpriority="high">
+      <div id="moment" aria-live="polite">
+        <p class="soft">Loading…</p>
+      </div>
+    </section>
+
+    <section class="join">
+      <h2>Get FamilySpeak for your family</h2>
+      <p>FamilySpeak is an iPhone app for kids 6 to 12 who understand their family’s language but answer in English: short daily lessons get them speaking Spanish or Haitian Creole out loud, with family.</p>
+      <a class="cta store" href="https://testflight.apple.com/join/WjjREqM3"><span class="store-top">Get it on iPhone</span><span class="store-sub">Free beta through Apple TestFlight</span></a>
+      <p class="fine"><a href="../">Learn more at familyspeak.app</a></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <span>© 2026 FamilySpeak · <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a></span>
+      <nav aria-label="Legal"><a href="../privacy/">Privacy Policy</a> <a href="../terms/">Terms</a></nav>
+    </div>
+  </footer>
+
+  <script>
+    // The token is in the address after # (never sent to the web server)
+    (function () {
+      var box = document.getElementById('moment');
+      var token = (location.hash.match(/t=([0-9a-f]{64})/) || [])[1];
+      function show(html) { box.innerHTML = html; }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      var gone = '<h1>This moment isn’t shared anymore</h1><p class="lead">Shared moments end after 30 days, or when the family stops sharing them.</p>';
+      if (!token) return show(gone);
+      fetch('https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token }),
+      })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (m) {
+          if (!m) return show(gone);
+          if (m.kind === 'voice' && m.audioUrl) {
+            show('<h1>🎙️ ' + esc(m.nickname) + ' is speaking ' + esc(m.language) + '!</h1>' +
+              '<p class="lead">A voice message ' + esc(m.nickname) + ' recorded for family on FamilySpeak.</p>' +
+              '<audio controls preload="none" src="' + esc(m.audioUrl) + '" style="width:100%;max-width:420px"></audio>');
+          } else if (m.kind === 'certificate' && m.certificate) {
+            var when = new Date(m.certificate.earned_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            show('<div class="card certificate-share"><p class="soft">FamilySpeak certificate</p><h1>🏅 ' + esc(m.nickname) + '</h1>' +
+              '<p class="lead">' + esc(m.certificate.title) + '</p><p>' + esc(m.nickname) + ' finished FamilySpeak Level 1 with a full conversation in ' + esc(m.language) + '.</p>' +
+              '<p class="soft">' + esc(when) + '</p></div>');
+          } else show(gone);
+        })
+        .catch(function () { show('<p class="lead">Couldn’t load this moment. Check your internet and try again.</p>'); });
+    })();
+  </script>
+</body>
+</html>

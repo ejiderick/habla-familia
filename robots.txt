@@ -27,5 +27,7 @@ User-agent: *
 Allow: /
 # The family recording page is reached by private links only
 Disallow: /familia/
+# Shared family moments are private links too
+Disallow: /share/
 
 Sitemap: https://familyspeak.app/sitemap.xml

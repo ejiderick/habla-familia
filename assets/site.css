@@ -266,3 +266,6 @@ details[open] summary { margin-bottom: 8px; }
 .fine { font-size: 15px; color: var(--soft-ink); }
 .foot .about { flex-basis: 100%; margin: 0 0 4px; color: var(--soft-ink); }
 .foot nav[aria-label="For families"] { flex-basis: 100%; }
+
+/* Shared moments page */
+.certificate-share { text-align: center; border: 3px solid var(--mango); background: var(--mango-soft); }

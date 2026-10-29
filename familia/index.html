@@ -34,8 +34,11 @@
     h1 { font-size: 30px; }
     h2 { font-size: 22px; margin-top: 28px; }
     b, strong { font-weight: 700; }
-    .brand { display: flex; align-items: center; gap: 8px; font: 800 28px var(--display); color: var(--plum); }
-    .brand img { width: 40px; height: 36px; }
+    .brand { display: flex; align-items: center; gap: 6px; font: 800 18px var(--display); color: var(--plum); }
+    .brand img { width: 26px; height: 24px; }
+    /* "FamilySpeak for your family": soft, only after recording and at the very bottom */
+    .getApp { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 15px; }
+    .getApp a.store { display: inline-block; margin-top: 6px; padding: 9px 16px; border-radius: 999px; background: var(--plum); color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; }
     .soft { color: var(--dusk); }
     a { color: var(--lilac-deep); text-underline-offset: 3px; }
     .card {
@@ -125,6 +128,8 @@ const SPANISH = {
   noPhrases: 'Por ahora no hay frases. ¡Vuelve pronto!',
   privacy: 'Solo la familia de {kid} tiene este enlace. Las grabaciones son privadas.',
   privacyLink: 'Política de privacidad',
+  getForFamily: '¿Hay niños en tu familia que entienden el idioma pero contestan en inglés? Prueba FamilySpeak:',
+  getIt: 'Descárgala en iPhone',
   newBadge: '¡Nuevo!',
   recorded: '✓ Grabada',
   saved: '✓ ¡Guardada! Gracias',
@@ -259,7 +264,7 @@ function render() {
   const startAt = asked ? data.phrases.findIndex((p) => p.stepId === asked) : data.phrases.findIndex((p) => !p.recorded);
   current = startAt >= 0 ? startAt : 0;
   app.innerHTML = `
-    <div class="brand"><img src="../assets/logo.svg" alt="" width="40" height="36">FamilySpeak</div>
+    <div class="brand"><img src="../assets/logo.svg" alt="" width="26" height="24">FamilySpeak</div>
     <h1>${say('hello', { name: data.link.name })}</h1>
     <p class="lead">${say('wouldLove', { kid })}</p>
     ${total
@@ -271,7 +276,8 @@ function render() {
     <details class="help"><summary>${say('micHelpTitle')}</summary><p>${say('tip', { kid })}</p></details>
     ${data.replies.length ? `<h2>${say('messagesFrom', { kid })}</h2>${data.replies.map(replyCard).join('')}` : ''}
     <div class="sendBack" id="sendBack"></div>
-    <p class="soft" style="font-size:14px;margin-top:32px">${say('privacy', { kid })} <a href="../privacy/" target="_blank" rel="noopener">${say('privacyLink')}</a></p>`;
+    <p class="soft" style="font-size:14px;margin-top:32px">${say('privacy', { kid })} <a href="../privacy/" target="_blank" rel="noopener">${say('privacyLink')}</a></p>
+    <div id="bottomGetApp">${getApp()}</div>`;
   if (total) {
     updateCount();
     showLine();
@@ -444,8 +450,18 @@ function showThanks(scroll) {
     <p>${done ? say(done === 1 ? 'thanksOne' : 'thanksMany', { kid, count: done }) : say('thanksNone', { kid })}</p>
     <p>${say(all ? 'thanksAll' : 'thanksSome')}</p>
     <p class="soft">${say('saveLink', { kid })}</p>
+    ${getApp()}
   </div>`;
+  // The thank-you has the same line: no need for it twice
+  const bottom = document.getElementById('bottomGetApp');
+  if (bottom) bottom.hidden = true;
   if (scroll) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/** A soft "FamilySpeak for your family" line: only after recording and at the bottom, never in the way. */
+function getApp() {
+  return `<div class="getApp soft">${say('getForFamily')} <a href="../" target="_blank" rel="noopener">familyspeak.app</a><br>
+    <a class="store" href="https://testflight.apple.com/join/WjjREqM3" target="_blank" rel="noopener">${say('getIt')}</a></div>`;
 }
 
 function replyCard(r) {
