@@ -1,0 +1,31 @@
+# FamilySpeak
+
+> FamilySpeak is an iPhone app for kids 6 to 12 who understand their family’s language but answer in English: short daily lessons get them speaking Spanish or Haitian Creole out loud, with family.
+
+FamilySpeak is made by LeadGendary Services LLC. Contact: hello@familyspeak.app.
+
+## Key facts
+
+- Who it’s for: Kids 6 to 12 who understand Spanish or Haitian Creole at home but answer in English.
+- What it does: Short daily lessons about real home life. Your kid hears a question and answers out loud; Mo, their buddy, listens and gently helps. Never a red X, never “wrong”.
+- Languages: Spanish (words from every Spanish-speaking family are accepted) and Haitian Creole. More languages are coming.
+- Price: $9.99 a month or $79.99 a year, one family plan for up to 4 kids, with a 7-day free trial. Free while we’re in beta.
+- Devices: iPhone. Android is coming.
+- Get it: https://testflight.apple.com/join/WjjREqM3 (free beta through Apple TestFlight until launch)
+
+## Pages
+
+- [Home](https://familyspeak.app/): what FamilySpeak is, how it works, Talk to Mo, family voices, pricing, questions
+- [Español](https://familyspeak.app/es/) and [Kreyòl](https://familyspeak.app/ht/): the home page in Spanish and Haitian Creole
+- [Spanish for kids](https://familyspeak.app/spanish-for-kids/): Spanish for kids 6 to 12 who understand Spanish at home but answer in English. Short daily speaking lessons about family life. iPhone app, free in beta.
+- [Haitian Creole for kids](https://familyspeak.app/haitian-creole-for-kids/): Haitian Creole (Kreyòl) for kids 6 to 12 who understand it at home but answer in English. Daily speaking lessons about Haitian family life. iPhone, free in beta.
+- [Mexican Spanish for kids](https://familyspeak.app/mexican-spanish-for-kids/): Mexican Spanish for kids 6 to 12 who understand but answer in English. Everyday words like camión and chamarra are accepted. iPhone app, free in beta.
+- [Puerto Rican Spanish for kids](https://familyspeak.app/puerto-rican-spanish-for-kids/): Puerto Rican Spanish for kids 6 to 12 who understand but answer in English. Everyday words like guagua and zafacón are accepted. iPhone app, free in beta.
+- [Dominican Spanish for kids](https://familyspeak.app/dominican-spanish-for-kids/): Dominican Spanish for kids 6 to 12 who understand but answer in English. Everyday words like guagua and colmado are accepted. iPhone app, free in beta.
+- [Cuban Spanish for kids](https://familyspeak.app/cuban-spanish-for-kids/): Cuban Spanish for kids 6 to 12 who understand but answer in English. Everyday words like guagua and fruta bomba are accepted. iPhone app, free in beta.
+- [Colombian Spanish for kids](https://familyspeak.app/colombian-spanish-for-kids/): Colombian Spanish for kids 6 to 12 who understand but answer in English. Everyday words like buseta and mecato are accepted. iPhone app, free in beta.
+- [Central American Spanish for kids](https://familyspeak.app/central-american-spanish-for-kids/): Central American Spanish for kids 6 to 12 who understand but answer in English. Everyday words like patojo / patoja and cipote / cipota are accepted. iPhone app, free in beta.
+- [Haitian Creole for Haitian-American kids](https://familyspeak.app/haitian-creole-for-haitian-american-kids/): Haitian Creole for Haitian-American kids 6 to 12 who understand Kreyòl but answer in English. Talk with family, out loud. iPhone app, free in beta.
+- [Parents’ questions](https://familyspeak.app/parents-questions/): Plain answers for parents: my child understands Spanish or Haitian Creole but won’t speak it; the best app for heritage kids; ages, languages, price and iPhone.
+- [Comparison](https://familyspeak.app/familyspeak-vs-duolingo-dinolingo-lingokids/): An honest comparison for heritage kids who understand Spanish or Haitian Creole but answer in English: FamilySpeak, Duolingo, Dinolingo and Lingokids. Checked October 2026.
+- [Privacy Policy](https://familyspeak.app/privacy/), [Terms](https://familyspeak.app/terms/), [Support](https://familyspeak.app/support/)

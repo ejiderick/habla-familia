@@ -6,9 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>FamilySpeak: Spanish for kids and Haitian Creole for kids | Bilingual kids app</title>
   <meta name="description" content="Your kids understand. Now they’ll answer. FamilySpeak is a bilingual kids app that helps kids 6 to 12 speak Spanish or Haitian Creole out loud with family: short daily lessons, a buddy named Mo, family voices. iPhone.">
+  <link rel="canonical" href="https://familyspeak.app/">
   <link rel="alternate" hreflang="en" href="https://familyspeak.app/">
   <link rel="alternate" hreflang="es" href="https://familyspeak.app/es/">
   <link rel="alternate" hreflang="ht" href="https://familyspeak.app/ht/">
+  <link rel="alternate" hreflang="x-default" href="https://familyspeak.app/">
+  <meta name="apple-itunes-app" content="app-id=6826376592">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FamilySpeak">
+  <meta property="og:title" content="FamilySpeak: Spanish for kids and Haitian Creole for kids | Bilingual kids app">
+  <meta property="og:description" content="Your kids understand. Now they’ll answer. FamilySpeak is a bilingual kids app that helps kids 6 to 12 speak Spanish or Haitian Creole out loud with family: short daily lessons, a buddy named Mo, family voices. iPhone.">
+  <meta property="og:url" content="https://familyspeak.app/">
+  <meta property="og:image" content="https://familyspeak.app/assets/icon-512.png">
+  <link rel="preload" as="image" href="assets/mo/mo-standing.webp" fetchpriority="high">
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
   <link rel="icon" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -17,6 +27,7 @@
     // Old family voice links (…/#t=…) open the family recording page
     if (location.hash.indexOf('#t=') === 0) location.replace('familia/' + location.hash);
   </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://familyspeak.app/#organization","name":"FamilySpeak","url":"https://familyspeak.app/","logo":"https://familyspeak.app/assets/icon-512.png","email":"hello@familyspeak.app","description":"FamilySpeak is an iPhone app for kids 6 to 12 who understand their family’s language but answer in English: short daily lessons get them speaking Spanish or Haitian Creole out loud, with family."},{"@type":"MobileApplication","@id":"https://familyspeak.app/#app","name":"FamilySpeak","description":"FamilySpeak is an iPhone app for kids 6 to 12 who understand their family’s language but answer in English: short daily lessons get them speaking Spanish or Haitian Creole out loud, with family.","operatingSystem":"iOS","applicationCategory":"EducationalApplication","audience":{"@type":"PeopleAudience","suggestedMinAge":6,"suggestedMaxAge":12},"inLanguage":["es","ht","en"],"installUrl":"https://testflight.apple.com/join/WjjREqM3","url":"https://familyspeak.app/","publisher":{"@id":"https://familyspeak.app/#organization"},"offers":[{"@type":"Offer","name":"Family Monthly (up to 4 kids, 7-day free trial)","price":"9.99","priceCurrency":"USD"},{"@type":"Offer","name":"Family Yearly (up to 4 kids, 7-day free trial)","price":"79.99","priceCurrency":"USD"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"My kid understands but won’t speak. Is this for them?","acceptedAnswer":{"@type":"Answer","text":"Yes. That’s exactly who it’s for: kids who understand the family’s language but answer in English."}},{"@type":"Question","name":"Which Spanish?","acceptedAnswer":{"@type":"Answer","text":"Every Spanish. We accept words from every Spanish-speaking family, wherever your family is from."}},{"@type":"Question","name":"Is it safe?","acceptedAnswer":{"@type":"Answer","text":"Yes. No ads. Parent controls, time limits and kid-safe chats. Only a parent can create the account, and we never ask for a child’s last name, photo or location. Privacy Policy"}},{"@type":"Question","name":"Do we need to speak the language at home every day?","acceptedAnswer":{"@type":"Answer","text":"No. The app does the practice. Family is a bonus."}},{"@type":"Question","name":"iPhone only?","acceptedAnswer":{"@type":"Answer","text":"iPhone now. Android is coming."}},{"@type":"Question","name":"Can I cancel?","acceptedAnswer":{"@type":"Answer","text":"Anytime."}}]}]}</script>
 </head>
 <body>
   <header class="top">
@@ -45,7 +56,7 @@
   <main class="">
 <div class="wrap">
       <section class="hero">
-        <img class="hero-mo" src="assets/mo/mo-standing.png" alt="Mo, the FamilySpeak buddy: a round mango-colored speech bubble with big eyes and a happy smile" width="240" height="231">
+        <img class="hero-mo" src="assets/mo/mo-standing.webp" alt="Mo, the FamilySpeak buddy: a round mango-colored speech bubble with big eyes and a happy smile" width="200" height="192" fetchpriority="high">
         <h1>Your kids understand.<br>Now they’ll answer.</h1>
         <p class="lead">FamilySpeak helps kids 6 to 12 speak your family’s language out loud, so they can really talk with the people they love.</p>
         <p class="now">Now in Spanish and Haitian Creole. <a href="#get">More coming.</a></p>
@@ -67,7 +78,7 @@
 
       <section id="mo" aria-labelledby="mo-title">
         <div class="feature">
-          <img src="assets/mo/mo-listening.png" alt="Mo leaning in to listen, with a pink ring around him" width="200" height="200" loading="lazy">
+          <img src="assets/mo/mo-listening.webp" alt="Mo leaning in to listen, with a pink ring around him" width="200" height="200" loading="lazy">
           <div>
             <h2 id="mo-title">Talk to Mo <span class="optional">New in the Nov 1 app update</span></h2>
             <p>A daily voice chat where your kid can talk about anything: pets, food, school. Mo answers out loud, at their level, and helps them say it in the family’s language.</p>
@@ -82,7 +93,7 @@
 
       <section id="family" aria-labelledby="family-title">
         <div class="feature reverse">
-          <img src="assets/mo/mo-happy.png" alt="Mo cheering with both arms up and sparkles" width="200" height="175" loading="lazy">
+          <img src="assets/mo/mo-happy.webp" alt="Mo cheering with both arms up and sparkles" width="200" height="175" loading="lazy">
           <div>
             <h2 id="family-title">Family can join from their phone <span class="optional">Optional</span></h2>
             <p>Anyone in the family, a parent, an aunt, a grandparent, can record lesson lines from a simple link. No app needed. Your kid hears their real voice in lessons and can send them voice messages back.</p>
@@ -140,7 +151,7 @@
 
       <section id="get" aria-labelledby="get-title">
         <div class="join">
-          <img class="join-mo" src="assets/mo/mo-thinking.png" alt="Mo thinking, one hand at his chin" width="120" height="126" loading="lazy">
+          <img class="join-mo" src="assets/mo/mo-thinking.webp" alt="Mo thinking, one hand at his chin" width="120" height="126" loading="lazy">
           <h2 id="get-title">Get FamilySpeak</h2>
           <a class="cta store" href="https://testflight.apple.com/join/WjjREqM3"><span class="store-top">Get it on iPhone</span><span class="store-sub">Free beta through Apple TestFlight</span></a>
 
@@ -213,6 +224,13 @@
 
   <footer class="foot">
     <div class="wrap">
+      <p class="about">FamilySpeak is an iPhone app for kids 6 to 12 who understand their family’s language but answer in English: short daily lessons get them speaking Spanish or Haitian Creole out loud, with family.</p>
+      <nav aria-label="For families">
+        <a href="spanish-for-kids/" hreflang="en">Spanish for kids</a>
+        <a href="haitian-creole-for-kids/" hreflang="en">Haitian Creole for kids</a>
+        <a href="parents-questions/" hreflang="en">Parents’ questions</a>
+        <a href="familyspeak-vs-duolingo-dinolingo-lingokids/" hreflang="en">Compare apps</a>
+      </nav>
       <span>© 2026 FamilySpeak · LeadGendary Services LLC · <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a></span>
       <nav aria-label="Legal">
         <a href="privacy/">Privacy Policy</a>
@@ -230,6 +248,6 @@
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && d.open) { d.open = false; d.querySelector('summary').focus(); } });
     })();
   </script>
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>

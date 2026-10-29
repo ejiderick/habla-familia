@@ -242,3 +242,27 @@ details[open] summary { margin-bottom: 8px; }
 .join { position: relative; }
 .join-mo { float: right; width: 110px; height: auto; margin: 0 0 8px 12px; }
 .join h3 { margin-top: 26px; }
+
+/* Pages for families (English): facts, words, home moments, comparison, related links */
+.facts { display: grid; gap: 12px; margin: 0; }
+.facts div { display: grid; grid-template-columns: 140px 1fr; gap: 12px; }
+.facts dt { font-weight: 700; color: var(--ink); }
+.facts dd { margin: 0; }
+@media (max-width: 600px) { .facts div { grid-template-columns: 1fr; gap: 2px; } }
+.words { max-width: 560px; }
+.words td:first-child { font: 600 18px var(--display); color: var(--ink); }
+.situations { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.situations li { display: grid; gap: 2px; background: var(--white); border-radius: 16px; padding: 14px 16px; box-shadow: var(--card-shadow); }
+.situations .topic { font-size: 14px; color: var(--soft-ink); text-transform: uppercase; letter-spacing: 0.04em; }
+.situations .q { font: 600 19px var(--display); color: var(--ink); }
+.situations .en { font-size: 15px; color: var(--soft-ink); font-style: italic; }
+.compare th[scope="row"] { background: var(--indigo-mist); white-space: nowrap; }
+.compare td, .compare th { font-size: 15px; }
+.compare thead th:nth-child(2) { background: var(--mango-soft); }
+.sources { padding-left: 20px; }
+.related ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.related a { display: inline-block; padding: 8px 14px; border-radius: 999px; background: var(--white); border: 2px solid var(--line); text-decoration: none; color: var(--ink); font-size: 15px; }
+.related h2 { font-size: 22px; }
+.fine { font-size: 15px; color: var(--soft-ink); }
+.foot .about { flex-basis: 100%; margin: 0 0 4px; color: var(--soft-ink); }
+.foot nav[aria-label="For families"] { flex-basis: 100%; }
