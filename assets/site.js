@@ -17,7 +17,7 @@
       needAges: 'Please pick at least one age.',
       needLanguage: 'Please pick your family language.',
       needIphone: 'Please tell us if you have an iPhone.',
-      joined: 'Thank you! We got your sign-up. We’ll email you when your invite is ready.',
+      joined: 'Thank you! We got it. We’ll email you when there’s news for your family.',
       joinedNoIphone: 'Thank you! The test is on iPhone for now. We’ll email you when FamilySpeak is ready for your phone.',
       needRequest: 'Please choose or type a language.',
       badLanguage: 'Please type the language name using letters only.',
@@ -33,7 +33,7 @@
       needAges: 'Elige al menos una edad.',
       needLanguage: 'Elige el idioma de tu familia.',
       needIphone: 'Dinos si tienes iPhone.',
-      joined: '¡Gracias! Recibimos tu inscripción. Te escribiremos cuando tu invitación esté lista.',
+      joined: '¡Gracias! Lo recibimos. Te escribiremos cuando haya novedades para tu familia.',
       joinedNoIphone: '¡Gracias! Por ahora la prueba es en iPhone. Te escribiremos cuando FamilySpeak esté listo para tu teléfono.',
       needRequest: 'Elige o escribe un idioma.',
       badLanguage: 'Escribe el nombre del idioma solo con letras.',
@@ -49,7 +49,7 @@
       needAges: 'Tanpri chwazi omwen yon laj.',
       needLanguage: 'Tanpri chwazi lang fanmi w.',
       needIphone: 'Tanpri di nou si ou gen yon iPhone.',
-      joined: 'Mèsi! Nou resevwa enskripsyon w. N ap ekri w lè envitasyon w pare.',
+      joined: 'Mèsi! Nou resevwa l. N ap ekri w lè gen nouvèl pou fanmi w.',
       joinedNoIphone: 'Mèsi! Pou kounye a, tès la se sou iPhone. N ap ekri w lè FamilySpeak pare pou telefòn ou.',
       needRequest: 'Tanpri chwazi oswa ekri yon lang.',
       badLanguage: 'Tanpri ekri non lang lan ak lèt sèlman.',
@@ -65,28 +65,47 @@
     return function (text, bad) { el.textContent = text; el.className = 'status' + (bad ? ' bad' : ' good'); };
   }
 
-  // Join the test
+  // Sign-up (the test, or "not ready yet"). "Request another language" also counts as a language request.
   var join = document.getElementById('join-form');
   if (join) {
     var say = sayer(document.getElementById('jn-status'));
     var button = join.querySelector('button');
+    var otherWrap1 = document.getElementById('jn-other-wrap');
+    var otherSelect = document.getElementById('jn-other');
+    var typedWrap = document.getElementById('jn-typed-wrap');
+    var typed = document.getElementById('jn-typed');
+    if (otherWrap1) {
+      Array.prototype.forEach.call(join.querySelectorAll('input[name="language"]'), function (r) {
+        r.addEventListener('change', function () { otherWrap1.hidden = r.value !== 'other' || !r.checked; });
+      });
+      otherSelect.addEventListener('change', function () {
+        typedWrap.hidden = otherSelect.value !== 'other';
+        if (!typedWrap.hidden) typed.focus();
+      });
+    }
     join.addEventListener('submit', function (e) {
       e.preventDefault();
       var email = join.email.value.trim();
       var ages = Array.prototype.slice.call(join.querySelectorAll('input[name="age"]:checked')).map(function (i) { return Number(i.value); });
       var language = (join.querySelector('input[name="language"]:checked') || {}).value;
       var iphone = (join.querySelector('input[name="iphone"]:checked') || {}).value;
+      var requested = language === 'other' && otherSelect ? (otherSelect.value === 'other' ? typed.value.trim() : otherSelect.value) : '';
       if (!email) return say(T.needEmail, true);
       if (!join.email.checkValidity()) return say(T.badEmail, true);
-      if (!ages.length) return say(T.needAges, true);
       if (!language) return say(T.needLanguage, true);
+      if (language === 'other' && otherSelect && !requested) return say(T.needRequest, true);
+      if (!ages.length) return say(T.needAges, true);
       if (!iphone) return say(T.needIphone, true);
       button.disabled = true;
       say(T.sending);
+      if (requested) {
+        post('language-request', { source: 'web', language: requested, email: email, askedIn: lang, website: join.website.value }).catch(function () {});
+      }
       post('test-signup', { email: email, kidAges: ages, familyLanguage: language, hasIphone: iphone === 'yes', siteLanguage: lang, website: join.website.value })
         .then(function (r) {
           if (r.status === 200) {
             join.reset();
+            if (otherWrap1) { otherWrap1.hidden = true; typedWrap.hidden = true; }
             say(iphone === 'yes' ? T.joined : T.joinedNoIphone);
           } else if (r.body && r.body.error === 'bad_email') say(T.badEmail, true);
           else if (r.status === 429) say(T.tooMany, true);
