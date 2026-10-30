@@ -110,6 +110,9 @@ const FUNCTION_URL = 'https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/fami
 const MAX_SECONDS = 15;
 // A voice reply to the kid: up to 1 minute
 const MAX_REPLY_SECONDS = 60;
+// Upload limits on the server (family function): the polished file must fit, or the original goes alone
+const MAX_LINE_BYTES = 3 * 1024 * 1024;
+const MAX_MESSAGE_BYTES = 2 * 1024 * 1024;
 
 const SPANISH = {
   locale: 'es',
@@ -218,6 +221,44 @@ async function openMic() {
 }
 window.addEventListener('pagehide', () => micStream && micStream.getTracks().forEach((t) => t.stop()));
 
+// Stop 0.3 s after the tap, so the last word is never cut off
+const stopSoon = (rec) => setTimeout(() => rec && rec.state === 'recording' && rec.stop(), 300);
+
+// Voice polish (voice-polish.js, shared with the server): trim the silence,
+// even volume, quieter gaps. Anything that goes wrong (an older browser, a
+// file it can't read, too slow) quietly keeps the original: never an error.
+let polishModule = null;
+const loadPolish = () => (polishModule = polishModule || import('./voice-polish.js'));
+async function polishAudio(source, sampleRate, maxBytes) {
+  const work = (async () => {
+    const { polishVoice, encodeWav } = await loadPolish();
+    const bytes = source instanceof Blob ? await source.arrayBuffer() : await (await fetch(source)).arrayBuffer();
+    const Offline = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    const decoded = await new Promise((ok, fail) => {
+      const p = new Offline(1, 1, 44100).decodeAudioData(bytes, ok, fail);
+      if (p && p.catch) p.catch(fail);
+    });
+    // Mono at the target rate (the browser mixes and resamples)
+    const ctx = new Offline(1, Math.max(1, Math.ceil(decoded.duration * sampleRate)), sampleRate);
+    const src = ctx.createBufferSource();
+    src.buffer = decoded;
+    src.connect(ctx.destination);
+    src.start();
+    const mono = await ctx.startRendering();
+    const result = polishVoice(mono.getChannelData(0), sampleRate);
+    if (!result) return null;
+    const wav = new Blob([encodeWav(result.samples, sampleRate)], { type: 'audio/wav' });
+    return wav.size <= maxBytes ? wav : null;
+  })();
+  const tooSlow = new Promise((ok) => setTimeout(() => ok(null), 8000));
+  try {
+    return await Promise.race([work, tooSlow]);
+  } catch {
+    return null;
+  }
+}
+const extOf = (b) => (b.type.includes('wav') ? 'wav' : b.type.includes('webm') ? 'webm' : 'm4a');
+
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 async function call(body) {
@@ -283,6 +324,9 @@ function render() {
     showLine();
   }
   app.querySelectorAll('audio[data-reply]').forEach((el) => {
+    polishAudio(el.getAttribute('src'), 24000, Infinity).then((wav) => {
+      if (wav && el.paused && !el.currentTime) el.src = URL.createObjectURL(wav);
+    });
     el.addEventListener('play', () => call({ action: 'heard', replyId: el.dataset.reply }).catch(() => {}), { once: true });
   });
   wireSendBack();
@@ -305,7 +349,7 @@ function wireSendBack() {
           .map((m) => `${esc(dayName(m.createdAt))}${m.played ? ` · ${say('kidHeard', { kid })}` : ''}`)
           .join('<br>')}</p>`
       : '';
-  let recorder = null, chunks = [], blob = null, timer = null;
+  let recorder = null, chunks = [], blob = null, polished = null, timer = null;
   const idle = (note = '') => {
     box.innerHTML = `<h2 style="margin-top:0">${say('replyTitle', { kid })}</h2><p class="soft">${say('replyIntro', { kid })}</p>
       ${data.canSend === false ? `<p>${say('replyLimit')}</p>` : `<div class="row"><button class="mic" data-act="record">${say('replyRecord')}</button></div>`}
@@ -325,10 +369,11 @@ function wireSendBack() {
     recorder = new MediaRecorder(micStream, type ? { mimeType: type } : undefined);
     chunks = [];
     recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data);
-    recorder.onstop = () => {
+    recorder.onstop = async () => {
       clearInterval(timer);
       blob = new Blob(chunks, { type: recorder.mimeType || type || 'audio/mp4' });
-      const url = URL.createObjectURL(blob);
+      polished = await polishAudio(blob, 16000, MAX_MESSAGE_BYTES);
+      const url = URL.createObjectURL(polished || blob);
       box.querySelector('.row').innerHTML = `<audio controls src="${url}"></audio>
         <button data-act="send">${say('replySend', { kid })}</button><button class="plain" data-act="record">${say('again')}</button>`;
     };
@@ -339,7 +384,10 @@ function wireSendBack() {
       left -= 1;
       const t = box.querySelector('.timer');
       if (t) t.textContent = '🔴 ' + left;
-      if (left <= 0) recorder.state === 'recording' && recorder.stop();
+      if (left <= 0) {
+        clearInterval(timer);
+        stopSoon(recorder);
+      }
     }, 1000);
   };
   const send = async (btn) => {
@@ -348,7 +396,8 @@ function wireSendBack() {
     const form = new FormData();
     form.append('action', 'message');
     form.append('token', token);
-    form.append('audio', blob, 'mensaje.' + (blob.type.includes('webm') ? 'webm' : 'm4a'));
+    form.append('audio', polished || blob, 'mensaje.' + extOf(polished || blob));
+    if (polished) form.append('original', blob, 'original.' + extOf(blob));
     try {
       const res = await fetch(FUNCTION_URL, { method: 'POST', body: form });
       if (res.status === 404) return showMessage('🔒', 'deadLinkTitle', 'deadLinkBody');
@@ -369,7 +418,7 @@ function wireSendBack() {
     const btn = e.target.closest('button');
     if (!btn) return;
     if (btn.dataset.act === 'record') start();
-    else if (btn.dataset.act === 'stop') recorder && recorder.state === 'recording' && recorder.stop();
+    else if (btn.dataset.act === 'stop') stopSoon(recorder);
     else if (btn.dataset.act === 'send') send(btn);
   });
   idle();
@@ -475,7 +524,7 @@ function wirePhrase(p, i) {
   const card = document.getElementById('p' + i);
   const controls = card.querySelector('[data-controls]');
   const error = card.querySelector('[data-error]');
-  let recorder = null, chunks = [], blob = null, timer = null;
+  let recorder = null, chunks = [], blob = null, polished = null, timer = null;
 
   const idle = () => {
     controls.innerHTML = p.recorded
@@ -498,9 +547,10 @@ function wirePhrase(p, i) {
     recorder = new MediaRecorder(micStream, type ? { mimeType: type } : undefined);
     chunks = [];
     recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data);
-    recorder.onstop = () => {
+    recorder.onstop = async () => {
       clearInterval(timer);
       blob = new Blob(chunks, { type: recorder.mimeType || type || 'audio/mp4' });
+      polished = await polishAudio(blob, 24000, MAX_LINE_BYTES);
       review();
     };
     recorder.start();
@@ -510,12 +560,15 @@ function wirePhrase(p, i) {
       left -= 1;
       const t = controls.querySelector('.timer');
       if (t) t.textContent = '🔴 ' + left;
-      if (left <= 0) recorder.state === 'recording' && recorder.stop();
+      if (left <= 0) {
+        clearInterval(timer);
+        stopSoon(recorder);
+      }
     }, 1000);
   };
 
   const review = () => {
-    const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(polished || blob);
     controls.innerHTML = `<audio controls src="${url}"></audio>
       <button data-act="save">${say('save')}</button><button class="plain" data-act="record">${say('again')}</button>`;
   };
@@ -528,7 +581,8 @@ function wirePhrase(p, i) {
     form.append('action', 'record');
     form.append('token', token);
     form.append('stepId', p.stepId);
-    form.append('audio', blob, 'voz.' + (blob.type.includes('webm') ? 'webm' : 'm4a'));
+    form.append('audio', polished || blob, 'voz.' + extOf(polished || blob));
+    if (polished) form.append('original', blob, 'original.' + extOf(blob));
     try {
       const res = await fetch(FUNCTION_URL, { method: 'POST', body: form });
       if (res.status === 404) return showMessage('🔒', 'deadLinkTitle', 'deadLinkBody');
@@ -568,7 +622,7 @@ function wirePhrase(p, i) {
     if (!btn) return;
     const act = btn.dataset.act;
     if (act === 'record') start();
-    else if (act === 'stop') recorder && recorder.state === 'recording' && recorder.stop();
+    else if (act === 'stop') stopSoon(recorder);
     else if (act === 'save') save(btn);
     else if (act === 'delete') remove(btn);
   });
