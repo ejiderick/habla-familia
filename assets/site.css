@@ -269,3 +269,17 @@ details[open] summary { margin-bottom: 8px; }
 
 /* Shared moments page */
 .certificate-share { text-align: center; border: 3px solid var(--mango); background: var(--mango-soft); }
+
+/* Dinner Table Questions: sample cards, as they look on paper */
+.qcards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.qcard { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 300px; background: var(--white); border: 2px dashed #C9C6E6; border-radius: 18px; padding: 18px 18px 14px; }
+.qcard::after { content: 'FamilySpeak'; position: absolute; right: -14px; top: 46%; transform: rotate(-24deg); font: 700 46px var(--display); color: var(--ink); opacity: 0.05; pointer-events: none; }
+.qcard-top { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--soft-ink); }
+.qcard-tag { font: 600 13px var(--display); padding: 3px 10px; border-radius: 999px; background: var(--mango-soft); color: var(--ink); }
+.qcard-q { font: 600 25px/1.15 var(--display); color: var(--ink); margin: 14px 0 4px; }
+.qcard-en { font-size: 15px; color: var(--soft-ink); margin: 0 0 12px; }
+.qcard-ideas { display: grid; gap: 2px; background: var(--indigo-mist); border-radius: 12px; padding: 8px 12px; margin: 0; color: var(--ink); font-size: 15px; }
+.qcard-label { font-size: 13px; color: var(--indigo); }
+.qcard-rule { margin: auto 0 0; padding-top: 12px; font-size: 13px; color: var(--soft-ink); }
+.form .consent { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; margin-top: 10px; }
+.form .consent input { width: 22px; height: 22px; margin: 1px 0 0; flex: none; accent-color: var(--indigo); }
