@@ -48,9 +48,9 @@
 
   <main class="wrap narrow doc">
     
-<p class="draft"><strong>Draft, to be reviewed by a lawyer before public launch.</strong> This policy covers the FamilySpeak test (TestFlight) version.</p>
+<p class="draft"><strong>Draft, to be reviewed by a lawyer before public launch.</strong> This policy covers the FamilySpeak app and the familyspeak.app website.</p>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: November 1, 2026</p>
+    <p class="updated">Last updated: November 2, 2026</p>
 
     <p>FamilySpeak is a speaking app for kids 6 to 12. It helps kids speak their family’s language. Courses today: <strong>Habla</strong> (Spanish) and <strong>Pale</strong> (Haitian Creole), with more coming. Because kids under 13 use it, we follow the US Children’s Online Privacy Protection Act (COPPA). This page explains, in plain words, what we collect, why, who helps us run the app, and how you delete it.</p>
 
@@ -66,16 +66,17 @@
     </ul>
 
     <h2>1. Parent permission (COPPA)</h2>
-    <p>Kids never sign up or log in on their own. A parent creates the account with an email address and password. Before any child profile can be used, the parent confirms they are 18 or older and the child’s parent or legal guardian, and gives permission for the child to use FamilySpeak. We save that permission with the date and time and the version of this notice it covered.</p>
+    <p>Kids never sign up or log in on their own. A parent creates the account with an email address and password, or by signing in with Apple or Google. Before any child profile can be used, the parent confirms they are 18 or older and the child’s parent or legal guardian, and gives permission for the child to use FamilySpeak. We save that permission with the date and time and the version of this notice it covered.</p>
     <p>A parent can review what we have about their child in the parent area, ask us to delete it, or refuse further collection by deleting the child’s profile. Email <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a> for anything you can’t do in the app.</p>
 
     <h2>2. What we collect</h2>
     <h3>About the parent</h3>
     <ul>
       <li><strong>Email address and password</strong> to log in. Passwords are stored by our login provider in a protected (hashed) form; we never see them.</li>
+      <li><strong>Sign in with Apple or Google</strong> (if you choose it, from app version 1.1.0): Apple sends us your email address, or a private relay address if you choose Hide My Email, and your name the first time, if you share it. Google sends us your name, email address and a link to your profile picture. We keep these with your login and use only the email. If you used Apple to sign in, deleting your account also revokes FamilySpeak’s access to your Apple account.</li>
       <li><strong>Permission record:</strong> that you agreed, when, and which notice version.</li>
       <li><strong>Settings:</strong> parent-screen language, time zone (so the weekly email arrives on Sunday), reminder time, weekly email on/off, English hints on/off, save recordings on/off.</li>
-      <li><strong>Plan:</strong> during the test there are no payments. We store the plan you picked and your free-trial dates, and count paywall views and taps to see if the screen is clear.</li>
+      <li><strong>Plan:</strong> FamilySpeak Plus subscriptions are bought through Apple and managed with RevenueCat (see below). We store your plan and its dates (including the free trial), and count paywall views and taps to see if the screen is clear. We never see payment details: Apple handles the payment.</li>
     </ul>
 
     <h3>About each child (entered by the parent)</h3>
@@ -99,11 +100,11 @@
 
     <h3 id="live-chats">Live voice chats (Talk to Mo, Talk with the grandparent)</h3>
     <ul>
-      <li>Your child can talk with Mo for up to 5 minutes a day, about a new everyday topic each day, and with the grandparent character for 3 minutes at the end of each unit (up to two chats a day). You can turn live chats off in the parent area, under Settings → <em>Live voice chats</em>.</li>
+      <li>Each child can use live chats (Mo, with a new everyday topic each day, and the grandparent character at the end of each unit) for up to <strong>5 minutes a day in all</strong>, and each family for up to <strong>150 minutes a month</strong>. You can turn live chats off in the parent area, under Settings → <em>Live voice chats</em>.</li>
       <li>During a chat the microphone stays on until the chat ends: when time runs out, when your child taps <em>Hang up</em>, or when they leave the screen or the app goes to the background.</li>
-      <li>The phone connects straight to OpenAI over an encrypted connection, using a key from our server that expires after two minutes. Our own OpenAI key never leaves our server.</li>
+      <li>Our server opens and ends every live chat. Your child’s voice then travels between the phone and OpenAI over an encrypted connection. The phone never receives an OpenAI key; ours never leaves our server.</li>
       <li>OpenAI hears your child’s voice live, turns it into text and answers with a voice. To set up each chat we send OpenAI your child’s nickname, age, boy/girl, family language (and Spanish style), phrases from lessons they finished, and for Mo, today’s topic and the favorites Mo remembers. We also send an anonymous code made from your account, never your email, so OpenAI can spot misuse.</li>
-      <li><strong>We don’t record or save the audio or the words of a live chat.</strong> The words on screen are shown only during the chat. We save the day, the child, which chat and the minutes used, to keep the daily limit and show you the minutes.</li>
+      <li><strong>We don’t record or save the audio or the words of a live chat.</strong> The words on screen are shown only during the chat. We save the day, the child, which chat and the minutes used, to keep the daily and monthly limits and show you the minutes.</li>
       <li>Mo and the grandparent are built to stay on kid-safe topics, never to ask for or repeat a last name, address, school, phone, email or photos, and to tell a child who seems upset or unsafe to talk to a grown-up they trust.</li>
     </ul>
 
@@ -161,7 +162,7 @@
     <ul>
       <li>No last names, photos, video, location, contacts, or phone numbers for kids.</li>
       <li>No advertising IDs, ads, analytics or tracking tools, and no push-notification service. Reminders are set up on your phone itself.</li>
-      <li>No payment details during the test.</li>
+      <li>No payment details: Apple handles payments, and we never see them.</li>
     </ul>
 
     <h2>3. Who helps us run FamilySpeak</h2>
@@ -172,10 +173,11 @@
         <tbody>
           <tr><td><strong>Supabase</strong><br><span class="soft">US (Oregon)</span></td><td>Our database, login, private file storage and server code</td><td>Everything listed above. Files are in private storage; each family can only reach its own data.</td></tr>
           <tr><td><strong>OpenAI</strong><br><span class="soft">US</span></td><td>Speech-to-text, answer checking, the AI grandparent, live voice chats with Mo and the grandparent, Mo’s voice in every language, and the AI voice for Haitian Creole lessons</td><td>The child’s recording and the question. For the AI grandparent, also the child’s nickname, age, boy/girl, and family language. For the AI voices, the line to read aloud (which can include the child’s nickname). For live voice chats, the child’s voice while the chat is open, and the chat setup described in “Live voice chats” above. We ask OpenAI not to store these requests where its API allows. Under OpenAI’s API policies, this data isn’t used to train its models and may be kept up to 30 days for abuse monitoring.</td></tr>
-          <tr><td><strong>Resend</strong></td><td>Sends our emails: the weekly report (if you leave it on) and the test invite</td><td>Your email address and the email: for the report, kids’ nicknames, lesson numbers, new words and a dinner phrase; for the invite, the TestFlight link.</td></tr>
+          <tr><td><strong>Resend</strong></td><td>Sends our emails: account emails (like confirming your email address), the weekly report (if you leave it on) and the test invite</td><td>Your email address and the email: for account emails, the confirmation link; for the report, kids’ nicknames, lesson numbers, new words and a dinner phrase; for the invite, the TestFlight link.</td></tr>
           <tr><td><strong>GitHub Pages</strong></td><td>Hosts this website and the family voice page</td><td>Standard web request information, like IP address, as with any website.</td></tr>
           <tr><td><strong>ImprovMX</strong></td><td>Forwards email sent to hello@familyspeak.app</td><td>Messages you send us.</td></tr>
-          <tr><td><strong>Apple</strong></td><td>TestFlight, for test versions of the app</td><td>Anything you choose to send through TestFlight feedback, and crash reports, under Apple’s own privacy policy.</td></tr>
+          <tr><td><strong>Apple</strong></td><td>The App Store and payments for FamilySpeak Plus, Sign in with Apple (if you choose it), and TestFlight for test versions of the app</td><td>Your purchase (Apple handles the payment; we never see payment details), your sign-in if you use Sign in with Apple, and anything you choose to send through TestFlight feedback, and crash reports, under Apple’s own privacy policy.</td></tr>
+          <tr><td><strong>Google</strong></td><td>Sign in with Google (if you choose it)</td><td>That you signed in to FamilySpeak, under Google’s own privacy policy. Google sends us only what’s described in “About the parent” above.</td></tr>
           <tr><td><strong>RevenueCat</strong></td><td>Managing FamilySpeak Plus subscriptions bought through Apple (including offer codes)</td><td>Your account ID and your email address (the parent’s only), plus your plan and its dates. Never your child’s data. Apple handles the payment itself.</td></tr>
         </tbody>
       </table>
@@ -187,7 +189,7 @@
       <li>To run lessons, check answers, and adapt lessons to each child’s level.</li>
       <li>To show the parent area and weekly report, and send the weekly email you can turn off.</li>
       <li>To choose test families and send test invites.</li>
-      <li>To make speech checking and lessons better during the test.</li>
+      <li>To make speech checking and lessons better.</li>
       <li>We never use children’s data for ads, and never contact children directly.</li>
     </ul>
 
@@ -197,7 +199,7 @@
     <h2>6. How to delete data</h2>
     <ul>
       <li><strong>One child:</strong> Parent area → tap the child → <em>Delete [name]’s data</em>. This deletes the profile, progress, answers and transcripts, saved recordings, family voice recordings and messages, AI-voiced lines with their name, live chat minutes, and what Mo remembers.</li>
-      <li><strong>Whole account:</strong> Parent area → Account → <em>Delete my account</em>. This deletes all of the above for every child, plus your login, settings, permission record and language requests.</li>
+      <li><strong>Whole account:</strong> Parent area → Account → <em>Delete my account</em>. This deletes all of the above for every child, plus your login (and, if you used Sign in with Apple, FamilySpeak’s access to it), settings, permission record and language requests.</li>
       <li><strong>A test sign-up or a language request from the website:</strong> email us from the address you gave and we’ll delete it.</li>
       <li>Or email <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a> from your account email and we’ll do it for you.</li>
     </ul>
