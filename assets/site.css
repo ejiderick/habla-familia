@@ -238,7 +238,7 @@ details[open] summary { margin-bottom: 8px; }
   .feature img, .feature.reverse img { order: 0; width: 140px; }
 }
 .pricing { max-width: 520px; }
-.pricing .beta { font: 700 20px var(--display); color: var(--indigo-deep); margin-bottom: 10px; }
+.pricing .plan-name { font: 700 20px var(--display); color: var(--indigo-deep); margin-bottom: 10px; }
 .plans { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
 .plan { flex: 1 1 160px; background: var(--mango-soft); border-radius: 16px; padding: 14px 16px; }
 .price { font: 700 30px var(--display); color: var(--ink); }

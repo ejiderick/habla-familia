@@ -133,6 +133,7 @@ const SPANISH = {
   privacyLink: 'Política de privacidad',
   getForFamily: '¿Hay niños en tu familia que entienden el idioma pero contestan en inglés? Prueba FamilySpeak:',
   getSoon: 'Próximamente en la App Store',
+  getIt: 'Descárgala en la App Store',
   newBadge: '¡Nuevo!',
   recorded: '✓ Grabada',
   saved: '✓ ¡Guardada! Gracias',
@@ -507,10 +508,16 @@ function showThanks(scroll) {
   if (scroll) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
+// The App Store link: set by scripts/publish-site.mjs from APP.getUrl (web/seo/pages.mjs); null = "coming soon"
+const STORE_URL = null;
+
 /** A soft "FamilySpeak for your family" line: only after recording and at the bottom, never in the way. */
 function getApp() {
+  const store = STORE_URL
+    ? `<a class="store" href="${STORE_URL}" target="_blank" rel="noopener">${say('getIt')}</a>`
+    : `<span class="store">${say('getSoon')}</span>`;
   return `<div class="getApp soft">${say('getForFamily')} <a href="../" target="_blank" rel="noopener">familyspeak.app</a><br>
-    <span class="store">${say('getSoon')}</span></div>`;
+    ${store}</div>`;
 }
 
 function replyCard(r) {
