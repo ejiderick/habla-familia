@@ -71,7 +71,7 @@
       document.getElementById('questions').textContent = T.questions;
 
       if (!/^[0-9a-f-]{36}$/i.test(token)) {
-        go.hidden = true;
+        go.parentNode.hidden = true; // the button style (display: inline-block) would override hidden on the button itself
         status.textContent = T.noCode;
         return;
       }
@@ -85,7 +85,7 @@
         })
           .then(function (res) {
             if (!res.ok) throw new Error(String(res.status));
-            go.hidden = true;
+            go.parentNode.hidden = true; // the button style (display: inline-block) would override hidden on the button itself
             show(title, T.doneTitle);
             show(lead, T.doneLead);
             status.textContent = '';
