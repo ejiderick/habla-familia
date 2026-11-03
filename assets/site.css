@@ -239,6 +239,13 @@ details[open] summary { margin-bottom: 8px; }
   .feature img, .feature.reverse img { order: 0; width: 140px; }
 }
 .pricing { max-width: 520px; }
+/* Free printables: the homepage cards and each set's page */
+.printables { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 12px; }
+.printable { display: block; background: var(--white); border-radius: 22px; box-shadow: var(--clay); padding: 12px 12px 14px; text-decoration: none; color: var(--ink); font: 700 19px var(--display); text-align: center; }
+.printable img { display: block; width: 100%; height: auto; border-radius: 12px; margin-bottom: 10px; }
+.printable-hero .preview { margin: 18px auto 4px; max-width: 420px; }
+.printable-hero .preview img { display: block; width: 100%; height: auto; border-radius: 16px; box-shadow: var(--clay); }
+.app-line { background: var(--white); border-radius: 18px; padding: 16px 18px; }
 .pricing .plan-name { font: 700 20px var(--display); color: var(--indigo-deep); margin-bottom: 10px; }
 .plans { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
 .plan { flex: 1 1 160px; background: var(--mango-soft); border-radius: 16px; padding: 14px 16px; }
