@@ -221,6 +221,10 @@ details[open] summary { margin-bottom: 8px; }
 .hero-mo { display: block; width: 200px; height: auto; margin: 0 auto 8px; }
 .cta.store { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; background: var(--ink); color: var(--white); padding: 12px 28px; }
 .cta.store:hover { color: var(--white); }
+/* Until the App Store link exists: the same shape, not a link */
+.cta.store.soon { cursor: default; }
+.cta.store.soon:hover { filter: none; }
+.cta.store.soon:active { transform: none; box-shadow: var(--clay); }
 .store-top { font: 700 19px var(--display); }
 .store-sub { font-size: 14px; opacity: 0.85; }
 .optional { display: inline-block; vertical-align: middle; font: 600 14px var(--body); background: var(--indigo-mist); color: var(--indigo-deep); padding: 2px 10px; border-radius: 999px; }

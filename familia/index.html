@@ -38,7 +38,7 @@
     .brand img { width: 26px; height: 24px; }
     /* "FamilySpeak for your family": soft, only after recording and at the very bottom */
     .getApp { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 15px; }
-    .getApp a.store { display: inline-block; margin-top: 6px; padding: 9px 16px; border-radius: 999px; background: var(--plum); color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; }
+    .getApp .store { display: inline-block; margin-top: 6px; padding: 9px 16px; border-radius: 999px; background: var(--plum); color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; }
     .soft { color: var(--dusk); }
     a { color: var(--lilac-deep); text-underline-offset: 3px; }
     .card {
@@ -132,7 +132,7 @@ const SPANISH = {
   privacy: 'Solo la familia de {kid} tiene este enlace. Las grabaciones son privadas.',
   privacyLink: 'Política de privacidad',
   getForFamily: '¿Hay niños en tu familia que entienden el idioma pero contestan en inglés? Prueba FamilySpeak:',
-  getIt: 'Descárgala en iPhone',
+  getSoon: 'Próximamente en la App Store',
   newBadge: '¡Nuevo!',
   recorded: '✓ Grabada',
   saved: '✓ ¡Guardada! Gracias',
@@ -510,7 +510,7 @@ function showThanks(scroll) {
 /** A soft "FamilySpeak for your family" line: only after recording and at the bottom, never in the way. */
 function getApp() {
   return `<div class="getApp soft">${say('getForFamily')} <a href="../" target="_blank" rel="noopener">familyspeak.app</a><br>
-    <a class="store" href="https://testflight.apple.com/join/WjjREqM3" target="_blank" rel="noopener">${say('getIt')}</a></div>`;
+    <span class="store">${say('getSoon')}</span></div>`;
 }
 
 function replyCard(r) {
