@@ -36,26 +36,27 @@
   </main>
   <script>
     (function () {
-      // Spanish and Kreyòl: only lines reviewed on Nov 3 (batch 5). Where there's no
-      // reviewed line yet (waiting, errors), those pages show a sign and our email instead.
-      var EMAIL = 'hello@familyspeak.app';
+      // Spanish and Kreyòl: only reviewed lines (batch 5; the error line, batch 6). While
+      // waiting, those pages show "…".
       var T = {
         en: {
           title: 'Unsubscribe from FamilySpeak emails', lead: 'You won’t get FamilySpeak emails any more.', button: 'Unsubscribe',
           wait: 'One moment…', doneTitle: 'You’re unsubscribed',
           doneLead: 'We won’t email you again. If you change your mind, leave your email again on familyspeak.app.',
-          noCode: 'This link is missing its code. Use the Unsubscribe link in the email, or write to ' + EMAIL + '.',
-          failed: 'That didn’t work. Please try again, or write to ' + EMAIL + '.', questions: 'Questions?',
+          noCode: 'Something went wrong. Email support@familyspeak.app and we’ll unsubscribe you.',
+          failed: 'Something went wrong. Email support@familyspeak.app and we’ll unsubscribe you.', questions: 'Questions?',
         },
         es: {
           title: 'Cancelar suscripción', lead: '', button: 'Cancelar suscripción',
           wait: '…', doneTitle: 'Listo. Ya no recibirás correos de FamilySpeak.', doneLead: '',
-          noCode: '⚠️ ' + EMAIL, failed: '⚠️ ' + EMAIL, questions: '',
+          noCode: 'Algo salió mal. Escríbenos a support@familyspeak.app y te daremos de baja.',
+          failed: 'Algo salió mal. Escríbenos a support@familyspeak.app y te daremos de baja.', questions: '',
         },
         ht: {
           title: 'Dezabòne', lead: '', button: 'Dezabòne',
           wait: '…', doneTitle: 'Fini. Ou p ap resevwa imèl FamilySpeak ankò.', doneLead: '',
-          noCode: '⚠️ ' + EMAIL, failed: '⚠️ ' + EMAIL, questions: '',
+          noCode: 'Gen yon pwoblèm. Ekri nou nan support@familyspeak.app epi n ap dezabòne w.',
+          failed: 'Gen yon pwoblèm. Ekri nou nan support@familyspeak.app epi n ap dezabòne w.', questions: '',
         },
       }[lang];
       var title = document.getElementById('title');
