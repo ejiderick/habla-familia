@@ -61,7 +61,8 @@ a:hover { color: var(--indigo-deep); }
 .top { padding: 14px 0; }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font: 800 26px var(--display); }
-.logo img { width: 44px; height: 40px; }
+.logo img { width: 193px; height: 56px; }
+/* The logo with white lettering (assets/logo-full-white.svg) is for dark backgrounds */
 .logo b { font-weight: inherit; }
 .nav { display: flex; gap: 18px; flex-wrap: wrap; font-size: 16px; }
 .nav a { color: var(--ink); text-decoration: none; }
