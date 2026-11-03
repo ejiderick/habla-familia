@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <title>Unsubscribe · FamilySpeak</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script>
+    // The link in each FamilySpeak email brings a private token (?t=…) and the
+    // email's language (&l=en|es|ht). The token is sent only to the FamilySpeak
+    // server, and only when the button is tapped (mail apps that open links
+    // ahead of time can't unsubscribe anyone).
+    var params = new URLSearchParams(location.search);
+    var token = params.get('t') || '';
+    var lang = ['en', 'es', 'ht'].indexOf(params.get('l')) >= 0 ? params.get('l') : 'en';
+    if (location.search) history.replaceState(null, '', location.pathname);
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="logo" href="../"><img src="../assets/logo.svg" alt="" width="44" height="40"><b>FamilySpeak</b></a>
+    </div>
+  </header>
+  <main class="wrap narrow doc" style="text-align:center">
+    <h1 id="title">Unsubscribe from FamilySpeak emails</h1>
+    <p class="lead" id="lead" style="margin:0 auto 24px">You won’t get FamilySpeak emails any more.</p>
+    <p><button class="cta" id="go" type="button">Unsubscribe</button></p>
+    <p id="status" class="soft" role="status" aria-live="polite"></p>
+    <p class="soft" style="margin-top:24px"><span id="questions">Questions?</span> <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a></p>
+  </main>
+  <script>
+    (function () {
+      // Spanish and Kreyòl: only lines reviewed on Nov 3 (batch 5). Where there's no
+      // reviewed line yet (waiting, errors), those pages show a sign and our email instead.
+      var EMAIL = 'hello@familyspeak.app';
+      var T = {
+        en: {
+          title: 'Unsubscribe from FamilySpeak emails', lead: 'You won’t get FamilySpeak emails any more.', button: 'Unsubscribe',
+          wait: 'One moment…', doneTitle: 'You’re unsubscribed',
+          doneLead: 'We won’t email you again. If you change your mind, leave your email again on familyspeak.app.',
+          noCode: 'This link is missing its code. Use the Unsubscribe link in the email, or write to ' + EMAIL + '.',
+          failed: 'That didn’t work. Please try again, or write to ' + EMAIL + '.', questions: 'Questions?',
+        },
+        es: {
+          title: 'Cancelar suscripción', lead: '', button: 'Cancelar suscripción',
+          wait: '…', doneTitle: 'Listo. Ya no recibirás correos de FamilySpeak.', doneLead: '',
+          noCode: '⚠️ ' + EMAIL, failed: '⚠️ ' + EMAIL, questions: '',
+        },
+        ht: {
+          title: 'Dezabòne', lead: '', button: 'Dezabòne',
+          wait: '…', doneTitle: 'Fini. Ou p ap resevwa imèl FamilySpeak ankò.', doneLead: '',
+          noCode: '⚠️ ' + EMAIL, failed: '⚠️ ' + EMAIL, questions: '',
+        },
+      }[lang];
+      var title = document.getElementById('title');
+      var lead = document.getElementById('lead');
+      var go = document.getElementById('go');
+      var status = document.getElementById('status');
+      var show = function (el, text) { el.textContent = text; el.hidden = !text; };
+      document.documentElement.lang = lang;
+      document.title = T.title + ' · FamilySpeak';
+      show(title, T.title);
+      show(lead, T.lead);
+      go.textContent = T.button;
+      document.getElementById('questions').textContent = T.questions;
+
+      if (!/^[0-9a-f-]{36}$/i.test(token)) {
+        go.hidden = true;
+        status.textContent = T.noCode;
+        return;
+      }
+      go.addEventListener('click', function () {
+        go.disabled = true;
+        status.textContent = T.wait;
+        fetch('https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/unsubscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: token }),
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error(String(res.status));
+            go.hidden = true;
+            show(title, T.doneTitle);
+            show(lead, T.doneLead);
+            status.textContent = '';
+          })
+          .catch(function () {
+            go.disabled = false;
+            status.textContent = T.failed;
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

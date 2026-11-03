@@ -1,6 +1,6 @@
 // familyspeak.app forms: "Not ready yet? Get an email" and "Request your language".
 // Sent to the FamilySpeak server (no cookies, no tracking). Messages follow
-// the page language (<html lang>); es/ht: ⚠️ pending native-speaker review.
+// the page language (<html lang>); es/ht: ⚠️ pending native-speaker review (joinedNoIphone reviewed Nov 3).
 (function () {
   var BASE = 'https://ddqowqcenlcjeyzpfoza.supabase.co/functions/v1/';
   var lang = (document.documentElement.lang || 'en').slice(0, 2);
@@ -34,7 +34,7 @@
       needLanguage: 'Elige el idioma de tu familia.',
       needIphone: 'Dinos si tienes iPhone.',
       joined: '¡Gracias! Lo recibimos. Te escribiremos cuando haya novedades para tu familia.',
-      joinedNoIphone: '¡Gracias! Por ahora FamilySpeak es para iPhone. Te escribiremos cuando esté listo para tu teléfono.',
+      joinedNoIphone: '¡Gracias! Por ahora FamilySpeak solo está en iPhone. Te escribiremos cuando esté disponible para tu teléfono.',
       needRequest: 'Elige o escribe un idioma.',
       badLanguage: 'Escribe el nombre del idioma solo con letras.',
       requested: function (l, notify) { return '¡Gracias! Contamos tu pedido de ' + l + '.' + (notify ? ' Te escribiremos cuando esté listo.' : ''); },
@@ -50,7 +50,7 @@
       needLanguage: 'Tanpri chwazi lang fanmi w.',
       needIphone: 'Tanpri di nou si ou gen yon iPhone.',
       joined: 'Mèsi! Nou resevwa l. N ap ekri w lè gen nouvèl pou fanmi w.',
-      joinedNoIphone: 'Mèsi! Pou kounye a, FamilySpeak se sou iPhone. N ap ekri w lè li pare pou telefòn ou.',
+      joinedNoIphone: 'Mèsi! Pou kounye a, FamilySpeak disponib sèlman sou iPhone. N ap ekri w lè li disponib pou telefòn ou.',
       needRequest: 'Tanpri chwazi oswa ekri yon lang.',
       badLanguage: 'Tanpri ekri non lang lan ak lèt sèlman.',
       requested: function (l, notify) { return 'Mèsi! Nou konte demann ou pou ' + l + '.' + (notify ? ' N ap ekri w lè li pare.' : ''); },
