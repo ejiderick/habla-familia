@@ -55,7 +55,7 @@
     
 <p>This policy covers the FamilySpeak app and the familyspeak.app website.</p>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: November 3, 2026</p>
+    <p class="updated">Last updated: November 4, 2026</p>
 
     <p>FamilySpeak is a speaking app for kids 6 to 12. It helps kids speak their family’s language. Courses today: <strong>Habla</strong> (Spanish) and <strong>Pale</strong> (Haitian Creole), with more coming. Because kids under 13 use it, we follow the US Children’s Online Privacy Protection Act (COPPA). This page explains, in plain words, what we collect, why, who helps us run the app, and how you delete it.</p>
 
@@ -65,7 +65,7 @@
       <li>About each child we keep only a <strong>nickname, age, boy/girl, family language, and their progress</strong>. Never last names, photos, location, or contact info.</li>
       <li>Your child’s voice is sent to our server to check each answer, then <strong>deleted right away</strong>, unless you turn on “Save recordings.”</li>
       <li>To check answers, the recording and the question are sent to <strong>OpenAI</strong>.</li>
-      <li><strong>Live voice chats</strong> with Mo and the grandparent send your child’s voice to <strong>OpenAI</strong> while the chat is open. We don’t record or save the audio or the words. We keep only the minutes, plus a few favorites Mo remembers (like a favorite food or a pet’s name), which you can see and erase.</li>
+      <li><strong>Chats with Mo and the family character</strong> are guided: they ask questions from your child’s lessons, and your child answers like in a lesson. Each answer goes to <strong>OpenAI</strong> to be turned into text and checked, then is deleted. We don’t keep the audio or the words of a chat, only the minutes.</li>
       <li><strong>No ads. We don’t sell or share data for advertising.</strong> No tracking tools, and no chatting with strangers.</li>
       <li>You can delete a child’s data or your whole account anytime in the app.</li>
     </ul>
@@ -104,22 +104,18 @@
       <li>If you turn on <strong>Save recordings</strong> in the parent area, recordings are kept in private storage so you can listen later. Turn it off anytime; delete them by deleting the child’s data.</li>
     </ul>
 
-    <h3 id="live-chats">Live voice chats (Talk to Mo, Talk with the grandparent)</h3>
+    <h3 id="live-chats">Live voice chats (Talk to Mo, Talk with the family character)</h3>
     <ul>
-      <li>Each child can use live chats (Mo, with a new everyday topic each day, and the grandparent character at the end of each unit) for up to <strong>5 minutes a day in all</strong>, and each family for up to <strong>150 minutes a month</strong>. You can turn live chats off in the parent area, under Settings → <em>Live voice chats</em>.</li>
-      <li>During a chat the microphone stays on until the chat ends: when time runs out, when your child taps <em>Hang up</em>, or when they leave the screen or the app goes to the background.</li>
-      <li>Our server opens and ends every live chat. Your child’s voice then travels between the phone and OpenAI over an encrypted connection. The phone never receives an OpenAI key; ours never leaves our server.</li>
-      <li>OpenAI hears your child’s voice live, turns it into text and answers with a voice. To set up each chat we send OpenAI your child’s nickname, age, boy/girl, family language (and Spanish style), phrases from lessons they finished, and for Mo, today’s topic and the favorites Mo remembers. We also send an anonymous code made from your account, never your email, so OpenAI can spot misuse.</li>
-      <li><strong>We don’t record or save the audio or the words of a live chat.</strong> The words on screen are shown only during the chat. We save the day, the child, which chat and the minutes used, to keep the daily and monthly limits and show you the minutes.</li>
-      <li>Mo and the grandparent are built to stay on kid-safe topics, never to ask for or repeat a last name, address, school, phone, email or photos, and to tell a child who seems upset or unsafe to talk to a grown-up they trust.</li>
+      <li>Each child can use these chats (Mo, with questions from the unit they’re on, and the family character at the end of each unit) for up to <strong>5 minutes a day in all</strong>, and each family for up to <strong>150 minutes a month</strong>. You can turn them off in the parent area, under Settings → <em>Live voice chats</em>.</li>
+      <li>Every line comes from our lessons, reviewed by native speakers. AI only creates the voices and checks answers.</li>
+      <li>The microphone is on only while your child holds the big button. Each answer goes to our server, then to OpenAI to turn it into text and check it, the same way as a lesson answer. The recording is deleted right away; “Save recordings” doesn’t apply to chats.</li>
+      <li>We also run the text of each answer through a short safety check with OpenAI. If your child says they are hurt, unsafe or very sad, or that someone passed away, you get a gentle note in the parent area (one short, neutral line, never your child’s words).</li>
+      <li><strong>We don’t record or save the audio or the words of a chat.</strong> The words on screen are shown only during the chat. We save the day, the child, which chat, the minutes used and how long your child spoke, to keep the limits and show you the minutes.</li>
     </ul>
 
     <h3 id="mo-remembers">What Mo remembers</h3>
     <ul>
-      <li>So chats feel friendly, Mo can remember a few small things your child shares: favorite food, color, animal, game, sport, holiday or school subject, the kind of pet they have, and the pet’s name. Nothing else.</li>
-      <li>Each one is a few words (30 characters at most), one of each kind. Our server refuses anything with numbers, links or emails, or with words for streets, schools or grown-ups’ titles. It can’t always tell a pet’s name from a person’s name, so check the list now and then.</li>
-      <li>See them in the parent area: tap the child → <em>What Mo remembers</em>. Tap <em>Forget</em> to erase one. They’re also deleted with the child’s data.</li>
-      <li>Mo uses them only to bring one up in a later chat (for example, “How is Canela today?”). They go to OpenAI only as part of setting up a Mo chat.</li>
+      <li>Mo no longer saves new favorites. Any he saved before stay in the parent area, where you can see and erase them: tap the child → <em>What Mo remembers</em>. They’re also deleted with the child’s data, and they’re not sent anywhere.</li>
     </ul>
 
     <h3>Family voice recordings (optional)</h3>
@@ -179,7 +175,7 @@
         <thead><tr><th>Provider</th><th>What they do</th><th>What they receive</th></tr></thead>
         <tbody>
           <tr><td><strong>Supabase</strong><br><span class="soft">US (Oregon)</span></td><td>Our database, login, private file storage and server code</td><td>Everything listed above. Files are in private storage; each family can only reach its own data.</td></tr>
-          <tr><td><strong>OpenAI</strong><br><span class="soft">US</span></td><td>Speech-to-text, answer checking, the AI grandparent, live voice chats with Mo and the grandparent, Mo’s voice in every language, and the AI voice for Haitian Creole lessons</td><td>The child’s recording and the question. For the AI grandparent, also the child’s nickname, age, boy/girl, and family language. For the AI voices, the line to read aloud (which can include the child’s nickname). For live voice chats, the child’s voice while the chat is open, and the chat setup described in “Live voice chats” above. We ask OpenAI not to store these requests where its API allows. Under OpenAI’s API policies, this data isn’t used to train its models and may be kept up to 30 days for abuse monitoring.</td></tr>
+          <tr><td><strong>OpenAI</strong><br><span class="soft">US</span></td><td>Speech-to-text, answer checking in lessons and chats, the chats’ safety check, the AI grandparent, Mo’s voice in every language, and the AI voice for Haitian Creole lessons</td><td>The child’s recording and the question. For the AI grandparent, also the child’s nickname, age, boy/girl, and family language. For the AI voices, the line to read aloud (which can include the child’s nickname). For the safety check, the text of a chat answer. We ask OpenAI not to store these requests where its API allows. Under OpenAI’s API policies, this data isn’t used to train its models and may be kept up to 30 days for abuse monitoring.</td></tr>
           <tr><td><strong>Resend</strong></td><td>Sends our emails: account emails (like confirming your email address), the weekly report (if you leave it on) and emails to parents who left their email on the website</td><td>Your email address and the email: for account emails, the confirmation link; for the report, kids’ nicknames, lesson numbers, new words and a dinner phrase; for website sign-ups, news about FamilySpeak.</td></tr>
           <tr><td><strong>GitHub Pages</strong></td><td>Hosts this website and the family voice page</td><td>Standard web request information, like IP address, as with any website.</td></tr>
           <tr><td><strong>ImprovMX</strong></td><td>Forwards email sent to hello@familyspeak.app</td><td>Messages you send us.</td></tr>
