@@ -16,7 +16,9 @@
     // phone we hand it to the app; it's never sent anywhere else.
     var params = new URLSearchParams(location.search);
     var code = params.get('code');
-    var appLink = code ? 'familyspeak://auth-callback?code=' + encodeURIComponent(code) : 'familyspeak://';
+    // A password reset link from the app's "Forgot password?" adds ?reset=1
+    var reset = params.get('reset') === '1';
+    var appLink = code ? 'familyspeak://auth-callback?code=' + encodeURIComponent(code) + (reset ? '&reset=1' : '') : 'familyspeak://';
     var onPhone = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     // Keep the code out of the address bar and browser history
     if (location.search || location.hash) history.replaceState(null, '', location.pathname);
@@ -29,16 +31,23 @@
     </div>
   </header>
   <main class="wrap narrow doc" style="text-align:center">
-    <h1>Your email is confirmed</h1>
+    <h1 id="title">Your email is confirmed</h1>
     <p class="lead" id="lead" style="margin:0 auto 24px">Go back to the FamilySpeak app on your phone and log in.</p>
     <p id="open" hidden><a class="cta" id="open-link" href="familyspeak://">Open FamilySpeak</a></p>
-    <div class="card" style="text-align:left">
+    <div class="card" id="other-langs" style="text-align:left">
       <p lang="es"><strong>Tu correo está confirmado.</strong> <span id="es">Vuelve a la app FamilySpeak en tu teléfono e inicia sesión.</span></p>
       <p lang="ht" style="margin:0"><strong>Imèl ou konfime.</strong> <span id="ht">Retounen nan app FamilySpeak la sou telefòn ou epi konekte.</span></p>
     </div>
     <p class="soft" style="margin-top:24px">Need help? <a href="mailto:hello@familyspeak.app">hello@familyspeak.app</a></p>
   </main>
   <script>
+    // A password reset: English only until the Spanish and Kreyòl are reviewed (batch 7)
+    if (reset) {
+      document.title = 'New password · FamilySpeak';
+      document.getElementById('title').textContent = 'Choose your new password';
+      document.getElementById('lead').textContent = 'Open this link on the phone where you tapped “Forgot password?”.';
+      document.getElementById('other-langs').hidden = true;
+    }
     // On a phone: a button too, in case the automatic switch to the app was blocked
     if (code && onPhone) {
       document.getElementById('lead').textContent = 'Opening FamilySpeak… If nothing happens, tap the button.';
