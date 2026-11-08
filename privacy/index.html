@@ -94,7 +94,6 @@
     <ul>
       <li><strong>Progress:</strong> lessons finished, stars, coins, streaks, badges, prizes, level-check results, questions to practice again, and time spent.</li>
       <li><strong>Answers:</strong> for each answer, whether it was right, the stars, and how long it took. We also keep a <strong>text transcript</strong> of what the speech checker heard (or what the child typed), with the question and result. Our small team may read these transcripts, never audio, to make speech checking fairer for kids’ voices. They are deleted when you delete the child or your account.</li>
-      <li><strong>Talking with the AI grandparent</strong> (the last lesson): the conversation is checked the same way. The saved transcript has numbers removed, and the AI grandparent is built never to ask for an address, school, last name, phone, or other private details.</li>
     </ul>
 
     <h3>Voice recordings</h3>
@@ -175,7 +174,9 @@
         <thead><tr><th>Provider</th><th>What they do</th><th>What they receive</th></tr></thead>
         <tbody>
           <tr><td><strong>Supabase</strong><br><span class="soft">US (Oregon)</span></td><td>Our database, login, private file storage and server code</td><td>Everything listed above. Files are in private storage; each family can only reach its own data.</td></tr>
-          <tr><td><strong>OpenAI</strong><br><span class="soft">US</span></td><td>Speech-to-text, answer checking in lessons and chats, the chats’ safety check, the AI grandparent, Mo’s voice in every language, and the AI voice for Haitian Creole lessons</td><td>The child’s recording and the question. For the AI grandparent, also the child’s nickname, age, boy/girl, and family language. For the AI voices, the line to read aloud (which can include the child’s nickname). For the safety check, the text of a chat answer. We ask OpenAI not to store these requests where its API allows. Under OpenAI’s API policies, this data isn’t used to train its models and may be kept up to 30 days for abuse monitoring.</td></tr>
+          <tr><td><strong>OpenAI</strong><br><span class="soft">US</span></td><td>Speech-to-text, answer checking in lessons and chats, the chats’ safety check, and Mo’s voice in Spanish and English</td><td>The child’s recording and the question. For the AI voices, the line to read aloud (which can include the child’s nickname). For the safety check, the text of a chat answer. We ask OpenAI not to store these requests where its API allows. Under OpenAI’s API policies, this data isn’t used to train its models and may be kept up to 30 days for abuse monitoring.</td></tr>
+          <tr><td><strong>ElevenLabs</strong><br><span class="soft">US</span></td><td>Voices for the Spanish course’s characters (Mamá, Abuela, Tío…)</td><td>The text of a line to say. Lines that mention your child’s nickname include the nickname; nothing else about your child.</td></tr>
+          <tr><td><strong>CreoleCentric</strong></td><td>Voices for the Haitian Creole course (Mo and the characters), since November 6, 2026</td><td>The text of a line to say. Lines that mention your child’s nickname include the nickname; nothing else about your child.</td></tr>
           <tr><td><strong>Resend</strong></td><td>Sends our emails: account emails (like confirming your email address), the weekly report (if you leave it on) and emails to parents who left their email on the website</td><td>Your email address and the email: for account emails, the confirmation link; for the report, kids’ nicknames, lesson numbers, new words and a dinner phrase; for website sign-ups, news about FamilySpeak.</td></tr>
           <tr><td><strong>GitHub Pages</strong></td><td>Hosts this website and the family voice page</td><td>Standard web request information, like IP address, as with any website.</td></tr>
           <tr><td><strong>ImprovMX</strong></td><td>Forwards email sent to hello@familyspeak.app</td><td>Messages you send us.</td></tr>
@@ -186,7 +187,7 @@
         </tbody>
       </table>
     </div>
-    <p>AI-voiced lines that mention your child’s name, and the AI grandparent’s replies, are saved only in your family’s private folder and deleted with your child’s data. Lesson lines without any personal details are saved once and shared by all families so they load faster. Voiced lines are also saved on your phone so they play without internet.</p>
+    <p>AI-voiced lines that mention your child’s name are saved only in your family’s private folder and deleted with your child’s data. Lesson lines without any personal details are saved once and shared by all families so they load faster. Voiced lines are also saved on your phone so they play without internet.</p>
 
     <h2>4. How we use it</h2>
     <ul>

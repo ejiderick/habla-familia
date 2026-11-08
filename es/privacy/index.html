@@ -95,7 +95,6 @@
     <ul>
       <li><strong>Progreso:</strong> lecciones terminadas, estrellas, monedas, rachas, insignias, premios, resultados de la prueba de nivel, preguntas para repasar y tiempo de uso.</li>
       <li><strong>Respuestas:</strong> de cada respuesta, si estuvo bien, las estrellas y cuánto tardó. También guardamos una <strong>transcripción en texto</strong> de lo que oyó el revisor de voz (o de lo que escribió el niño), con la pregunta y el resultado. Nuestro pequeño equipo puede leer estas transcripciones, nunca el audio, para que la revisión de voz sea más justa con las voces de los niños. Se borran cuando borras al niño o tu cuenta.</li>
-      <li><strong>Conversación con el abuelo o la abuela de IA</strong> (la última lección): la conversación se revisa igual. La transcripción guardada no incluye números, y el abuelo de IA está hecho para nunca pedir una dirección, la escuela, el apellido, un teléfono ni otros datos privados.</li>
     </ul>
 
     <h3>Grabaciones de voz</h3>
@@ -176,7 +175,9 @@
         <thead><tr><th>Proveedor</th><th>Qué hace</th><th>Qué recibe</th></tr></thead>
         <tbody>
           <tr><td><strong>Supabase</strong><br><span class="soft">EE. UU. (Oregón)</span></td><td>Nuestra base de datos, inicio de sesión, almacenamiento privado de archivos y código del servidor</td><td>Todo lo descrito arriba. Los archivos están en un espacio privado; cada familia solo puede llegar a sus propios datos.</td></tr>
-          <tr><td><strong>OpenAI</strong><br><span class="soft">EE. UU.</span></td><td>Voz a texto, revisión de respuestas en las lecciones y las charlas, la revisión de seguridad de las charlas, el abuelo de IA, la voz de Mo en todos los idiomas y la voz de IA de las lecciones de criollo haitiano</td><td>La grabación del niño y la pregunta. Para el abuelo de IA, también el apodo, la edad, niño/niña y el idioma de la familia. Para las voces de IA, la frase que se lee en voz alta (que puede incluir el apodo del niño). Para la revisión de seguridad, el texto de una respuesta de charla. Le pedimos a OpenAI que no guarde estas solicitudes cuando su API lo permite. Según las políticas de la API de OpenAI, estos datos no se usan para entrenar sus modelos y se pueden guardar hasta 30 días para vigilar abusos.</td></tr>
+          <tr><td><strong>OpenAI</strong><br><span class="soft">EE. UU.</span></td><td>Voz a texto, revisión de respuestas en las lecciones y las charlas, la revisión de seguridad de las charlas y la voz de Mo en español e inglés</td><td>La grabación del niño y la pregunta. Para las voces de IA, la frase que se lee en voz alta (que puede incluir el apodo del niño). Para la revisión de seguridad, el texto de una respuesta de charla. Le pedimos a OpenAI que no guarde estas solicitudes cuando su API lo permite. Según las políticas de la API de OpenAI, estos datos no se usan para entrenar sus modelos y se pueden guardar hasta 30 días para vigilar abusos.</td></tr>
+          <tr><td><strong>ElevenLabs</strong><br><span class="soft">EE. UU.</span></td><td>Las voces de los personajes del curso de español (Mamá, Abuela, Tío…)</td><td>El texto de una frase para decir. Las frases que dicen el apodo de tu hijo incluyen el apodo; nada más sobre tu hijo.</td></tr>
+          <tr><td><strong>CreoleCentric</strong></td><td>Las voces del curso de criollo haitiano (Mo y los personajes), desde el 6 de noviembre de 2026</td><td>El texto de una frase para decir. Las frases que dicen el apodo de tu hijo incluyen el apodo; nada más sobre tu hijo.</td></tr>
           <tr><td><strong>Resend</strong></td><td>Envía nuestros correos: los de tu cuenta (como confirmar tu correo), el informe semanal (si lo dejas activado) y los correos para quienes se inscribieron en la página web</td><td>Tu correo y el mensaje: en los correos de tu cuenta, el enlace para confirmar; en el informe, los apodos de los niños, números de lecciones, palabras nuevas y una frase para la cena; en los correos de la página web: novedades de FamilySpeak.</td></tr>
           <tr><td><strong>GitHub Pages</strong></td><td>Aloja esta página web y la página de voces de la familia</td><td>La información normal de una visita web, como la dirección IP, igual que cualquier página.</td></tr>
           <tr><td><strong>ImprovMX</strong></td><td>Reenvía los correos enviados a hello@familyspeak.app</td><td>Los mensajes que nos mandas.</td></tr>
@@ -187,7 +188,7 @@
         </tbody>
       </table>
     </div>
-    <p>Las frases con voz de IA que dicen el nombre de tu hijo y las respuestas del abuelo de IA se guardan solo en la carpeta privada de tu familia y se borran con los datos de tu hijo. Las frases de las lecciones sin datos personales se guardan una vez y las comparten todas las familias para que carguen más rápido. Las frases con audio también se guardan en tu teléfono para que puedan escucharse sin internet.</p>
+    <p>Las frases con voz de IA que dicen el nombre de tu hijo se guardan solo en la carpeta privada de tu familia y se borran con los datos de tu hijo. Las frases de las lecciones sin datos personales se guardan una vez y las comparten todas las familias para que carguen más rápido. Las frases con audio también se guardan en tu teléfono para que puedan escucharse sin internet.</p>
 
     <h2>4. Cómo lo usamos</h2>
     <ul>
