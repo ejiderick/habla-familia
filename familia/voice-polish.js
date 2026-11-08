@@ -7,7 +7,8 @@
  * at the same loudness with the silence trimmed:
  *
  *   1. A gentle low cut (80 Hz) for fan, AC and traffic rumble.
- *   2. Trim the silence at the start and end, keeping PADDING_S around the voice.
+ *   2. Trim the silence at the start and end (trimSilence: every voice file has at
+ *      most MAX_START_SILENCE_S before the voice and MAX_END_SILENCE_S after it).
  *   3. Quiet the gaps between words a little (at most 10 dB), never the
  *      voice itself, so TV and room noise drop without a robotic sound.
  *   4. Bring the spoken parts to VOICE_LEVEL_DB, with a soft limit on peaks.
@@ -20,8 +21,14 @@
 export const VOICE_LEVEL_DB = -24;
 /** Peaks never go above this (dBFS). */
 export const PEAK_CEILING_DB = -1;
-/** Silence kept before and after the voice, so no word is cut off. */
-export const PADDING_S = 0.2;
+/** Silence kept around the voice while polishing, before the final trim (trimSilence). */
+export const PADDING_S = 0.16;
+/** The most silence any voice file may have before and after the voice. */
+export const MAX_START_SILENCE_S = 0.1;
+export const MAX_END_SILENCE_S = 0.15;
+/** What a trim leaves: a little inside those limits, so no first or last sound is clipped. */
+const KEEP_START_S = 0.08;
+const KEEP_END_S = 0.12;
 
 const FRAME_S = 0.02;
 const MIN_SPEECH_FRAMES = 3; // 60 ms above the threshold counts as voice (not a click)
@@ -145,7 +152,81 @@ export function polishVoice(input, sampleRate, options = {}) {
     out[i] = v;
   }
 
-  return { samples: out, startS: start / sampleRate, endS: end / sampleRate, gainDb, levelDb };
+  return { samples: trimSilence(out, sampleRate).samples, startS: start / sampleRate, endS: end / sampleRate, gainDb, levelDb };
+}
+
+/**
+ * How much silence is before and after the voice, in seconds (null: no voice found).
+ * A sound is 30 ms or more within 40 dB of the file's loudest moment and clearly
+ * above any background noise, or any moment at all within 30 dB of the loudest. The one measure used by the trim, the audit and the test.
+ *
+ * @param {Float32Array} samples mono samples
+ * @param {number} sampleRate
+ * @returns {{ startS: number, endS: number, durationS: number } | null}
+ */
+export function measureSilence(samples, sampleRate) {
+  const frame = Math.max(1, Math.round(0.01 * sampleRate));
+  const frames = Math.floor(samples.length / frame);
+  if (frames < 3) return null;
+  const db = new Float32Array(frames);
+  for (let f = 0; f < frames; f++) {
+    let sum = 0;
+    for (let i = f * frame; i < (f + 1) * frame; i++) sum += samples[i] * samples[i];
+    db[f] = dbOf(sum / frame);
+  }
+  const sorted = Array.from(db).sort((a, b) => a - b);
+  const peak = sorted[sorted.length - 1];
+  const noise = sorted[Math.floor(sorted.length * 0.05)];
+  if (peak < -55) return null;
+  const threshold = Math.max(peak - 40, Math.min(noise + 10, peak - 35), -60);
+  const clear = peak - 30; // Even one frame this loud is a real sound (a plosive, a short syllable), never silence
+  let first = -1, last = -1;
+  for (let f = 0; f < frames; ) {
+    if (db[f] <= threshold) { f++; continue; }
+    let end = f, loud = false;
+    while (end < frames && db[end] > threshold) { loud = loud || db[end] > clear; end++; }
+    if (end - f >= 3 || loud) { if (first < 0) first = f; last = end - 1; }
+    f = end;
+  }
+  if (first < 0) return null;
+  const durationS = samples.length / sampleRate;
+  return { startS: (first * frame) / sampleRate, endS: Math.max(0, durationS - ((last + 1) * frame) / sampleRate), durationS };
+}
+
+/**
+ * Cuts the dead air at either end, down to the limits above, and never into the voice.
+ * Only the side that is over its limit changes. Used by polishVoice, the mixed
+ * "everyone together" lines and scripts/voice/silence-audit.mjs.
+ *
+ * @param {Float32Array} samples mono samples
+ * @param {number} sampleRate
+ * @returns {{ samples: Float32Array, cutStartS: number, cutEndS: number }}
+ */
+export function trimSilence(samples, sampleRate) {
+  // Cutting can change what counts as the quiet floor: measure again until it's inside the limits
+  let current = trimOnce(samples, sampleRate);
+  for (let i = 0; i < 3 && (current.cutStartS || current.cutEndS); i++) {
+    const again = trimOnce(current.samples, sampleRate);
+    if (!again.cutStartS && !again.cutEndS) break;
+    current = { samples: again.samples, cutStartS: current.cutStartS + again.cutStartS, cutEndS: current.cutEndS + again.cutEndS };
+  }
+  return current;
+}
+
+function trimOnce(samples, sampleRate) {
+  const m = measureSilence(samples, sampleRate);
+  if (!m) return { samples, cutStartS: 0, cutEndS: 0 };
+  const cutStartS = m.startS > MAX_START_SILENCE_S ? m.startS - KEEP_START_S : 0;
+  const cutEndS = m.endS > MAX_END_SILENCE_S ? m.endS - KEEP_END_S : 0;
+  if (!cutStartS && !cutEndS) return { samples, cutStartS: 0, cutEndS: 0 };
+  const from = Math.round(cutStartS * sampleRate);
+  const to = samples.length - Math.round(cutEndS * sampleRate);
+  const out = samples.slice(from, to);
+  // A soft edge where the cut was made (no click)
+  const fade = Math.max(1, Math.round(0.005 * sampleRate));
+  if (cutStartS) for (let i = 0; i < fade && i < out.length; i++) out[i] *= i / fade;
+  if (cutEndS) for (let i = 0; i < fade && i < out.length; i++) out[out.length - 1 - i] *= i / fade;
+  return { samples: out, cutStartS, cutEndS };
 }
 
 /** Mono 16-bit WAV bytes. */
