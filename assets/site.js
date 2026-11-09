@@ -153,3 +153,26 @@
     });
   }
 })();
+
+// Home page clips: load and play (muted) only while on screen; the poster shows until then.
+// Anyone who asked for less motion keeps the poster and gets play controls instead.
+(function () {
+  var clips = document.querySelectorAll('video[data-autoplay]');
+  if (!clips.length) return;
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (calm || !('IntersectionObserver' in window)) {
+    clips.forEach(function (v) { v.controls = true; });
+    return;
+  }
+  var seen = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var p = e.target.play();
+        if (p && p.catch) p.catch(function () { e.target.controls = true; });
+      } else {
+        e.target.pause();
+      }
+    });
+  }, { threshold: 0.25 });
+  clips.forEach(function (v) { v.muted = true; seen.observe(v); });
+})();
